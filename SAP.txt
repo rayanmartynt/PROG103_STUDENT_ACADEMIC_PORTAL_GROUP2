@@ -1,0 +1,175 @@
+DECLARE students AS dictionary        // key: student_id, value: {password, name, faculty, program}
+DECLARE lecturers AS dictionary       // key: username, value: {password}
+DECLARE grades AS list                 // each element is a grade record (dictionary)
+
+// 1. Weighted total + letter grade (A if total > 90)
+FUNCTION calculate_total_and_letter(test, assign, project, exam)
+    total = test*0.20 + assign*0.15 + project*0.30 + exam*0.35
+    total = round(total, 2)
+    IF total > 90 THEN letter = "A"
+    ELSE IF total >= 80 THEN letter = "B"
+    ELSE IF total >= 70 THEN letter = "C"
+    ELSE IF total >= 60 THEN letter = "D"
+    ELSE letter = "F"
+    RETURN total, letter
+END FUNCTION
+
+// 2. Add or update a grade record
+FUNCTION add_grade(student_id, semester, subject, test, assign, project, exam)
+    total, letter = calculate_total_and_letter(test, assign, project, exam)
+    FOR EACH grade IN grades
+        IF grade.student_id == student_id AND grade.semester == semester AND grade.subject == subject THEN
+            REMOVE grade FROM grades
+        END IF
+    END FOR
+    APPEND {student_id, semester, subject, test, assign, project, exam, total, letter} TO grades
+END FUNCTION
+
+// 3. Get all grades for one student
+FUNCTION get_student_grades(student_id)
+    result = []
+    FOR EACH grade IN grades
+        IF grade.student_id == student_id THEN
+            APPEND (grade.semester, grade.subject, grade.test, grade.assign, grade.project, grade.exam, grade.total, grade.letter) TO result
+        END IF
+    END FOR
+    RETURN result
+END FUNCTION
+
+// 4. Student login validation
+FUNCTION student_login_ok(student_id, password)
+    IF students CONTAINS student_id AND students[student_id].password == password THEN
+        RETURN True
+    ELSE
+        RETURN False
+    END IF
+END FUNCTION
+
+// 5. Lecturer login validation
+FUNCTION lecturer_login_ok(username, password)
+    IF lecturers CONTAINS username AND lecturers[username].password == password THEN
+        RETURN True
+    ELSE
+        RETURN False
+    END IF
+END FUNCTION
+
+// 6. Register a new student
+FUNCTION register_student(student_id, password, name, faculty, program)
+    IF student_id IN students THEN RETURN False
+    students[student_id] = {password: password, name: name, faculty: faculty, program: program}
+    RETURN True
+END FUNCTION
+
+// 7. Register a new lecturer
+FUNCTION register_lecturer(username, password)
+    IF username IN lecturers THEN RETURN False
+    lecturers[username] = {password: password}
+    RETURN True
+END FUNCTION
+
+PROCEDURE main()
+
+    CREATE root window
+    SET title = "Academic Portal - Sierra Leone (SDG4)"
+    SET size = 500x500
+
+    // --- Load demo data for testing ---
+    CALL register_student("S101", "123", "John Koroma", "Faculty of ICT", "BSEM")
+    CALL register_student("S102", "456", "Aminata Sesay", "Faculty of ICT", "BIT")
+    CALL register_lecturer("prof", "pass")
+    CALL add_grade("S101", "Semester 1", "Structured Programming", 85, 78, 88, 92)
+    CALL add_grade("S101", "Semester 1", "Database", 91, 88, 94, 96)
+
+    // --- Create tabs ---
+    CREATE notebook (tab control)
+
+    // ---------- LOGIN TAB ----------
+    CREATE login_tab inside notebook
+
+    CREATE dropdown for Role (Student / Lecturer)
+    CREATE text field for ID/Username
+    CREATE password field (masked)
+
+    DEFINE do_login:
+        READ role, uid, password
+        IF any field empty THEN
+            SHOW error "Fill both fields"
+            RETURN
+        END IF
+
+        IF role == "Student" THEN
+            IF student_login_ok(uid, password) THEN
+                CALL student_dashboard(root, uid)
+                CLEAR login fields
+            ELSE
+                SHOW error "Invalid Student ID or Password"
+            END IF
+        ELSE  // Lecturer
+            IF lecturer_login_ok(uid, password) THEN
+                CALL lecturer_dashboard(root, uid)
+                CLEAR login fields
+            ELSE
+                SHOW error "Invalid Lecturer credentials"
+            END IF
+        END IF
+    END PROCEDURE
+
+    CREATE button "Login" → calls do_login
+
+    // ---------- STUDENT SIGNUP TAB ----------
+    CREATE student_tab inside notebook
+
+    CREATE text fields: Student ID, Full Name, Password, Confirm Password
+    CREATE readonly field for Faculty (default "Faculty of ICT")
+    CREATE dropdown for Program (BSEM, BIT, BBIT, DIT, CIT)
+
+    DEFINE do_student_signup:
+        READ student_id, name, password, confirm, faculty, program
+        IF student_id, name, or password empty THEN
+            SHOW error "ID, Name and Password required"
+            RETURN
+        END IF
+        IF password != confirm THEN
+            SHOW error "Passwords do not match"
+            RETURN
+        END IF
+        IF register_student(student_id, password, name, faculty, program) THEN
+            SHOW success message
+            CLEAR student signup fields
+        ELSE
+            SHOW error "Student ID already exists"
+        END IF
+    END PROCEDURE
+
+    CREATE button "Register Student" → calls do_student_signup
+
+    // ---------- LECTURER SIGNUP TAB ----------
+    CREATE lecturer_tab inside notebook
+
+    CREATE text fields: Username, Password, Confirm Password
+
+    DEFINE do_lecturer_signup:
+        READ username, password, confirm
+        IF username or password empty THEN
+            SHOW error "Username and password required"
+            RETURN
+        END IF
+        IF password != confirm THEN
+            SHOW error "Passwords do not match"
+            RETURN
+        END IF
+        IF register_lecturer(username, password) THEN
+            SHOW success message
+            CLEAR lecturer signup fields
+        ELSE
+            SHOW error "Username already taken"
+        END IF
+    END PROCEDURE
+
+    CREATE button "Register Lecturer" → calls do_lecturer_signup
+
+    // --- Start the GUI event loop ---
+    START mainloop of root window
+
+END PROCEDURE
