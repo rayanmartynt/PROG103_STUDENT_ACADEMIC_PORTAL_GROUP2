@@ -65,10 +65,16 @@ def get_student_grades(student_id):
                 g['total'],
                 g['grade']
             ))
+            return result
 
-# Function 4:
+# Function 4: Student Login Validation
+def student_login_validation(student_id, password):
+    return student_id in students and students['student_id']['password'] == password
 
-# Function 5:
+# Function 5: Lecturer Login Validation
+def lecturer_login_validation(username, password):
+
+    return username in lecturers and lecturers[username]['password'] == password
 
 # Function 6:
 
