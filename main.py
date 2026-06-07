@@ -30,10 +30,41 @@ def calculate_total(test, assignment, project, exam):
 
 # Function 2: Add or update grade record
 def add_grade(student_id, semester, module, test, assignment, project, exam):
-    total, letter = calculate_total(test, assignment, project, exam)
+    total, grade = calculate_total(test, assignment, project, exam)
+    # Enumerate create and return a new object
+    for i, g in enumerate(grades):
+        # Removes grade with the same semester/module/studentId
+        if g['student_id'] == student_id and g['semester'] == semester and g['module'] == module:
+            grades.pop(i)
+            break
+        grades.append({
+            'student_id': student_id,
+            'semester': semester,
+            'module': module,
+            'test': test,
+            'assignment': assignment,
+            'project': project,
+            'exam': exam,
+            'total': total,
+            'grade': grade
+        })
 
+# Function 3: Get all grades for one student
+def get_student_grades(student_id):
 
-# Function 3:
+    result = [] #Empty list for result that will store all grades for one student
+    for g in grades:
+        if g['student_id'] == student_id:
+            result.append((
+                g['semester'],
+                g['mopdule'],
+                g['test'],
+                g['assignment'],
+                g['project'],
+                g['exam'],
+                g['total'],
+                g['grade']
+            ))
 
 # Function 4:
 
