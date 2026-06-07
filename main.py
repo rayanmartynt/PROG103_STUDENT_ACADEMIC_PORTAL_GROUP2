@@ -80,7 +80,7 @@ def register_student(student_id, password, name, faculty, program):
     if student_id in students:
         return False
     # This is an else statement
-    students[studnet_id] = {
+    students[student_id] = {
         'name': name,
         'faculty': faculty,
         'program': program,
