@@ -65,7 +65,7 @@ def get_student_grades(student_id):
                 g['total'],
                 g['grade']
             ))
-            return result
+        return result
 
 # Function 4: Student Login Validation
 def student_login_validation(student_id, password):
@@ -73,9 +73,25 @@ def student_login_validation(student_id, password):
 
 # Function 5: Lecturer Login Validation
 def lecturer_login_validation(username, password):
-
     return username in lecturers and lecturers[username]['password'] == password
 
-# Function 6:
+# Function 6: Register a new student
+def register_student(student_id, password, name, faculty, program):
+    if student_id in students:
+        return False
+    # This is an else statement
+    students[studnet_id] = {
+        'name': name,
+        'faculty': faculty,
+        'program': program,
+        'password': password
+    }
+    return True
 
-# Function 7:
+# Function 7: Register a new lecturer
+def register_lecturer(username, password)
+    if username in lecturers:
+        return False
+    # This is an else statement
+    lecturers[username] = {password}
+    return True
