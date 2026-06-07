@@ -74,13 +74,6 @@ PROCEDURE main()
     SET title = "Academic Portal - Sierra Leone (SDG4)"
     SET size = 500x500
 
-    // --- Load demo data for testing ---
-    CALL register_student("S101", "123", "John Koroma", "Faculty of ICT", "BSEM")
-    CALL register_student("S102", "456", "Aminata Sesay", "Faculty of ICT", "BIT")
-    CALL register_lecturer("prof", "pass")
-    CALL add_grade("S101", "Semester 1", "Structured Programming", 85, 78, 88, 92)
-    CALL add_grade("S101", "Semester 1", "Database", 91, 88, 94, 96)
-
     // --- Create tabs ---
     CREATE notebook (tab control)
 
