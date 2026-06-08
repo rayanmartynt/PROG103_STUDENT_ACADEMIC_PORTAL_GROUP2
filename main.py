@@ -317,7 +317,7 @@ def lecturer_dashboard(parent, username):
     def save():
         student_id = studentID_entry.get().strip() #Using strip function to remove whitespaces
         if student_id not in students:
-            messagebox.showerror(f'Student ID: {student_id} does not exist. This student needs to register first.')
+            messagebox.showerror('Error',f'Student ID: {student_id} does not exist. This student needs to register first.')
 
         try:
             test = float(test_entry.get())
@@ -471,57 +471,57 @@ def main():
                              pady=20)
 
     # ----- STUDENT SIGNUP TAB -----
-    student_tab = tk.Frame(tab)
+    student_tab = tk.Frame(master = tab)
     tab.add(student_tab,
             text="Student Signup")
 
     tk.Label(student_tab,
              text="Student ID:").grid(row=0,
-                                                   column=0,
-                                                   pady=5,
-                                                   padx=10,
-                                                   sticky="e")
-    student_id = tk.Entry(student_tab)
+                                      column=0,
+                                      pady=5,
+                                      padx=10,
+                                      sticky="e")
+    student_id = tk.Entry(master = student_tab)
     student_id.grid(row=0,
                column=1,
                pady=5)
 
-    tk.Label(student_tab,
+    tk.Label(master = student_tab,
              text="Full Name:").grid(row=1,
-                                                  column=0,
-                                                  pady=5,
-                                                  padx=10,
-                                                  sticky="e")
-    student_name = tk.Entry(student_tab)
+                                     column=0,
+                                     pady=5,
+                                     padx=10,
+                                     sticky="e")
+    student_name = tk.Entry(master = student_tab)
     student_name.grid(row=1,
-                column=1,
-                pady=5)
+                      column=1,
+                      pady=5)
 
-    tk.Label(student_tab,
+    tk.Label(master = student_tab,
              text="Password:").grid(row=2,
                                     column=0,
                                     pady=5,
                                     padx=10,
                                     sticky="e")
-    s_pwd = tk.Entry(student_tab,
+    password = tk.Entry(master = student_tab,
                      show="*")
-    s_pwd.grid(row=2,
+    password.grid(row=2,
                column=1,
                pady=5)
 
-    tk.Label(student_tab,
+    tk.Label(master = student_tab,
              text="Confirm Password:").grid(row=3,
-                                                         column=0,
-                                                         pady=5,
-                                                         padx=10,
-                                                         sticky="e")
-    studentConfirm_password = tk.Entry(student_tab,
+                                            column=0,
+                                            pady=5,
+                                            padx=10,
+                                            sticky="e")
+    studentConfirm_password = tk.Entry(master = student_tab,
                                        show="*")
     studentConfirm_password.grid(row=3,
                                  column=1,
                                  pady=5)
 
-    tk.Label(student_tab, text="Faculty:"
+    tk.Label(master = student_tab, text="Faculty:"
              ).grid(row=4,
                     column=0,
                     pady=5,
@@ -530,15 +530,17 @@ def main():
     faculty_entry = tk.Entry(master = student_tab)
     faculty_entry.insert("Faculty of ICT")
     faculty_entry.config(state="readonly")
-    faculty_entry.grid(row=4, column=1, pady=5)
+    faculty_entry.grid(row=4,
+                       column=1,
+                       pady=5)
 
-    tk.Label(student_tab, text="Program:").grid(row=5,
+    tk.Label(master = student_tab, text="Program:").grid(row=5,
                                                 column=0,
                                                 pady=5,
                                                 padx=10,
                                                 sticky="e")
     programs = ["BSEM", "BIT", "BBIT", "DIT", "CIT"]
-    program_combo = ttk.Combobox(student_tab,
+    program_combo = ttk.Combobox(master = student_tab,
                               values=programs,
                               state="readonly",
                               width=17)
@@ -569,7 +571,8 @@ def main():
         else:
             messagebox.showerror("Error", f"Student ID {studentId} already exists")
 
-    tk.Button(student_tab, text="Register Student",
+    tk.Button(master = student_tab,
+              text="Register Student",
               command=do_student_signup,
               width=18).grid(row=6,
                              column=0,
@@ -592,11 +595,12 @@ def main():
                 column=1,
                 pady=10)
 
-    tk.Label(master = lecturer_tab, text="Password:").grid(row=1,
-                                                           column=0,
-                                                           pady=10,
-                                                           padx=10,
-                                                           sticky="e")
+    tk.Label(master = lecturer_tab,
+             text="Password:").grid(row=1,
+                                    column=0,
+                                    pady=10,
+                                    padx=10,
+                                    sticky="e")
     lecturer_password = tk.Entry(master = lecturer_tab,
                                  show="*")
     lecturer_password.grid(row=1,
