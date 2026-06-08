@@ -68,6 +68,113 @@ FUNCTION register_lecturer(username, password)
     RETURN True
 END FUNCTION
 
+// 8. Display lecturer dashboard
+PROCEDURE lecturer_dashboard(parent_window, username)
+
+    CREATE new window "win" as child of parent_window
+    SET title = "Lecturer Dashboard – " + username
+    SET size = 850x550
+
+    DISPLAY "Upload Student Grade" heading
+
+    // --- Input form ---
+    CREATE dropdown for Semester (Semester 1 to 6)
+    CREATE dropdown for Subject (Structured Programming, Database, ...)
+    CREATE text field for Student ID
+    CREATE text fields for Test (20%), Assignment (15%), Project (30%), Exam (35%)
+
+    CREATE label to show total and grade preview
+
+    // --- Table showing all grades in system ---
+    CREATE table with columns:
+        Student ID, Semester, Subject, Test, Assign, Project, Exam, Total, Grade
+
+    DEFINE refresh_all_grades:
+        CLEAR all rows from table
+        FOR EACH grade IN grades
+            INSERT row with grade data
+        END FOR
+    END PROCEDURE
+
+    // --- Preview button logic ---
+    DEFINE preview:
+        TRY to read test, assign, project, exam as numbers
+        IF any number is invalid or not between 0-100 THEN
+            SHOW error message
+        ELSE
+            total, letter = calculate_total_and_letter(test, assign, project, exam)
+            UPDATE preview label to show total and letter
+        END IF
+    END PROCEDURE
+
+    // --- Save button logic ---
+    DEFINE save:
+        READ student_id from field
+        IF student_id NOT in students THEN
+            SHOW error "Student not found"
+            RETURN
+        END IF
+
+        TRY to read test, assign, project, exam as numbers
+        IF any number invalid or outside 0-100 THEN
+            SHOW error "Enter numbers 0-100"
+            RETURN
+        END IF
+
+        CALL add_grade(student_id, semester, subject, test, assign, project, exam)
+        SHOW success message
+        CALL refresh_all_grades()
+        CLEAR all input fields
+        RESET preview label
+    END PROCEDURE
+
+    CREATE buttons:
+        - "Preview Grade" → calls preview
+        - "Save Grade" → calls save
+        - "Refresh List" → calls refresh_all_grades
+        - "Logout" → closes win
+
+    CALL refresh_all_grades()
+
+    WAIT for user interaction
+
+END PROCEDURE
+
+// 9. Display Student dashboard
+PROCEDURE student_dashboard(parent_window, student_id)
+
+    CREATE new window "win" as child of parent_window
+    SET title = "Student Dashboard – " + student_id
+    SET size = 750x400
+
+    GET student record from students using student_id
+    DISPLAY welcome message with student.name and student.program
+
+    CREATE a table (treeview) with columns:
+        Semester, Subject, Test(20%), Assign(15%), Project(30%), Exam(35%), Total, Grade
+
+    DEFINE refresh procedure:
+        CLEAR all rows from table
+        CALL get_student_grades(student_id) -> store in grade_list
+        IF grade_list is empty THEN
+            INSERT one row showing "No grades uploaded yet"
+        ELSE
+            FOR EACH grade IN grade_list
+                INSERT row with grade data
+            END FOR
+        END IF
+    END PROCEDURE
+
+    CALL refresh()
+
+    CREATE buttons:
+        - "Refresh" button → calls refresh()
+        - "Logout" button → closes win
+
+    WAIT for user interaction (window loop)
+
+END PROCEDURE
+
 PROCEDURE main()
 
     CREATE root window

@@ -1,5 +1,14 @@
-"""In-memory database to store users credentials and students grades"""
+# tkinter provides GUI components: windows, buttons, labels, text boxes, etc.
+import tkinter as tk
 
+# messagebox shows pop-up alerts like errors, success messages, and warnings
+from tkinter import messagebox
+
+# ttk gives modern theme widgets like combo boxes (dropdown menus) and modern treeviews (tables)
+import ttkbootstrap as ttk
+
+
+"""In-memory database to store users credentials and students grades"""
 students = {} #stores key: students id, value: {password, name, faculty, program}
 lecturers = {} #Stores key: username, value: {password}
 grades = [] #Each element is a grade record (dictionary)
@@ -65,7 +74,7 @@ def get_student_grades(student_id):
                 g['total'],
                 g['grade']
             ))
-        return result
+    return result
 
 # Function 4: Student Login Validation
 def student_login_validation(student_id, password):
@@ -89,9 +98,103 @@ def register_student(student_id, password, name, faculty, program):
     return True
 
 # Function 7: Register a new lecturer
-def register_lecturer(username, password)
+def register_lecturer(username, password):
     if username in lecturers:
         return False
     # This is an else statement
     lecturers[username] = {password}
     return True
+
+# Function 8: Display Lecturer Dashboard
+def lecturer_dashboard(parent, username):
+    win = ttk.Toplevel(parent)
+    win.title(f'Lecturer Dashboard - {username}')
+    win.geometry('850x550')
+
+    ttk.Label(master = win,
+             text = 'Upload Student Grade').pack(pady = 5)
+
+    # Input frame
+    frame = ttk.Frame(master = win)
+    frame.pack(pady = 10)
+
+    # Semester
+    ttk.Label(master = frame,
+             text = 'Semester').grid(row = 0,
+                                     column = 0,
+                                     pady = 5,
+                                     padx = 5,
+                                     sticky = 'e')
+    semester_var = tk.StringVar(value = 'Semester 1')
+    sem_combo = ttk.Combobox(master = frame,
+                             textvariable = semester_var,
+                             state = 'readonly',
+                             values = [f'Semester {i}' for i in range(1, 7)],
+                             width = 12)
+    sem_combo.grid(row = 0,
+                   column = 1,
+                   padx = 5)
+
+    # Student ID
+    ttk.Label(master = frame,
+             text = 'Student ID:').grid(row = 1,
+                                        column = 0,
+                                        pady = 5,
+                                        padx = 5,
+                                        sticky = 'e')
+    studentID_entry = ttk.Entry(master = frame,
+                                width = 15)
+    studentID_entry.grid(column = 1,
+                         row = 1,
+                         padx = 5)
+
+    # Marks
+    ttk.Label(master = frame,
+              text = 'Test (20%):').grid(row = 2,
+                                         column = 0,
+                                         pady = 5,
+                                         padx = 5,
+                                         sticky = 'e')
+    test_entry = ttk.Entry(master = frame,
+                           width = 10)
+    test_entry.grid(row = 2,
+                    column = 1)
+
+    ttk.Label(master = frame,
+              text = 'Assignment (15%):').grid(row = 2,
+                                               column = 2,
+                                               padx = 5,
+                                               pady = 5,
+                                               sticky = 'e')
+    assignment_entry = ttk.Entry(master = frame,
+                                 width = 10)
+    assignment_entry.grid(row = 2,
+                          column = 3)
+
+    ttk.Label(master = frame,
+              text = 'Project (30%):').grid(row = 3,
+                                            column = 0,
+                                            padx = 5,
+                                            pady = 5,
+                                            sticky = 'e')
+    project_entry = ttk.Entry(master = frame,
+                              width = 10)
+    project_entry.grid(row = 3,
+                       column = 1)
+
+    ttk.Label(master = frame,
+              text = 'Exam (35%):').grid(row = 3,
+                                         column = 2,
+                                         padx = 5,
+                                         pady = 5,
+                                         sticky = 'e')
+    exam_entry = ttk.Entry(master = frame,
+                           width = 10)
+    exam_entry.grid(row = 3,
+                    column = 3)
+
+    # Grade preview
+
+
+def main():
+    root = ttk.root(themename = 'cyborg')
