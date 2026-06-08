@@ -238,13 +238,6 @@ PROCEDURE main()
     root.title = "Academic Portal - Sierra Leone (SDG4)"
     root.geometry = "500x500"
 
-    // ----- DEMO DATA -----
-    register_student("S101", "123", "John Koroma", "Faculty of ICT", "BSEM")
-    register_student("S102", "456", "Aminata Sesay", "Faculty of ICT", "BIT")
-    register_lecturer("prof", "pass")
-    add_grade("S101", "Semester 1", "Structured Programming", 85, 78, 88, 92)
-    add_grade("S101", "Semester 1", "Database", 91, 88, 94, 96)
-
     // notebook (tabs)
     notebook = new ttk.Notebook in root
     pack notebook to fill both, expand = true, padx=10, pady=10
