@@ -237,6 +237,19 @@ def lecturer_dashboard(parent, username):
                                       g['grade']))
 
     def preview():
+        try:
+            test = float(test_entry.get())
+            assignment = float(assignment_entry.get())
+            project = float(project_entry.get())
+            exam = float(exam_entry.get())
+            total, grade = calculate_total(test, assignment, project, exam)
+            preview_label.config(text = f'Total: {total} Grade: {grade}')
+        except:
+            preview_label.config(text = 'Enter valid numbers 0-100')
+
+    def save():
+        studentID = studentID_entry.get().strip() #Using strip function to remove whitespaces
+        if studentID not in students:
 
 
 
@@ -245,6 +258,13 @@ def main():
     root = ttk.Window(themename = 'cyborg')
     root.title("Limkokwing Student Academic Portal")
     root.geometry('500x500')
+
+    # Tabs
+    tab = ttk.Notebook(root)
+    tab.pack(fill = 'both',
+             expand = True,
+             padx = 10,
+             pady = 10)
 
     root.mainloop()
 

@@ -1,33 +1,54 @@
-DECLARE students AS dictionary        // key: student_id, value: {password, name, faculty, program}
-DECLARE lecturers AS dictionary       // key: username, value: {password}
-DECLARE grades AS list                 // each element is a grade record (dictionary)
+// ==================== DATA STORAGE ====================
+students = empty dictionary       // key: student_id, value: {password, name, faculty, program}
+lecturers = empty dictionary      // key: username, value: {password}
+grades = empty list               // each element: {student_id, semester, subject, test, assign, project, exam, total, letter}
 
-// 1. Weighted total + letter grade (A if total > 90)
+// ==================== HELPER FUNCTIONS ====================
+
 FUNCTION calculate_total_and_letter(test, assign, project, exam)
-    total = test*0.20 + assign*0.15 + project*0.30 + exam*0.35
+    total = test * 0.20 + assign * 0.15 + project * 0.30 + exam * 0.35
     total = round(total, 2)
-    IF total > 90 THEN letter = "A"
-    ELSE IF total >= 80 THEN letter = "B"
-    ELSE IF total >= 70 THEN letter = "C"
-    ELSE IF total >= 60 THEN letter = "D"
-    ELSE letter = "F"
+    IF total > 90 THEN
+        letter = "A"
+    ELSE IF total >= 80 THEN
+        letter = "B"
+    ELSE IF total >= 70 THEN
+        letter = "C"
+    ELSE IF total >= 60 THEN
+        letter = "D"
+    ELSE
+        letter = "F"
+    END IF
     RETURN total, letter
 END FUNCTION
 
-// 2. Add or update a grade record
 FUNCTION add_grade(student_id, semester, subject, test, assign, project, exam)
     total, letter = calculate_total_and_letter(test, assign, project, exam)
-    FOR EACH grade IN grades
+    // remove existing grade for same (student, semester, subject)
+    FOR i FROM 0 TO length(grades)-1
+        grade = grades[i]
         IF grade.student_id == student_id AND grade.semester == semester AND grade.subject == subject THEN
-            REMOVE grade FROM grades
+            REMOVE grade at index i FROM grades
+            BREAK
         END IF
     END FOR
-    APPEND {student_id, semester, subject, test, assign, project, exam, total, letter} TO grades
+    // add new grade
+    new_grade = {
+        student_id: student_id,
+        semester: semester,
+        subject: subject,
+        test: test,
+        assign: assign,
+        project: project,
+        exam: exam,
+        total: total,
+        letter: letter
+    }
+    APPEND new_grade TO grades
 END FUNCTION
 
-// 3. Get all grades for one student
 FUNCTION get_student_grades(student_id)
-    result = []
+    result = empty list
     FOR EACH grade IN grades
         IF grade.student_id == student_id THEN
             APPEND (grade.semester, grade.subject, grade.test, grade.assign, grade.project, grade.exam, grade.total, grade.letter) TO result
@@ -36,240 +57,360 @@ FUNCTION get_student_grades(student_id)
     RETURN result
 END FUNCTION
 
-// 4. Student login validation
 FUNCTION student_login_ok(student_id, password)
-    IF students CONTAINS student_id AND students[student_id].password == password THEN
+    IF student_id exists in students AND students[student_id].password == password THEN
         RETURN True
     ELSE
         RETURN False
     END IF
 END FUNCTION
 
-// 5. Lecturer login validation
 FUNCTION lecturer_login_ok(username, password)
-    IF lecturers CONTAINS username AND lecturers[username].password == password THEN
+    IF username exists in lecturers AND lecturers[username].password == password THEN
         RETURN True
     ELSE
         RETURN False
     END IF
 END FUNCTION
 
-// 6. Register a new student
 FUNCTION register_student(student_id, password, name, faculty, program)
-    IF student_id IN students THEN RETURN False
-    students[student_id] = {password: password, name: name, faculty: faculty, program: program}
-    RETURN True
+    IF student_id already in students THEN
+        RETURN False
+    ELSE
+        students[student_id] = {password: password, name: name, faculty: faculty, program: program}
+        RETURN True
+    END IF
 END FUNCTION
 
-// 7. Register a new lecturer
 FUNCTION register_lecturer(username, password)
-    IF username IN lecturers THEN RETURN False
-    lecturers[username] = {password: password}
-    RETURN True
+    IF username already in lecturers THEN
+        RETURN False
+    ELSE
+        lecturers[username] = {password: password}
+        RETURN True
+    END IF
 END FUNCTION
 
-// 8. Display lecturer dashboard
-PROCEDURE lecturer_dashboard(parent_window, username)
-
-    CREATE new window "win" as child of parent_window
-    SET title = "Lecturer Dashboard – " + username
-    SET size = 850x550
-
-    DISPLAY "Upload Student Grade" heading
-
-    // --- Input form ---
-    CREATE dropdown for Semester (Semester 1 to 6)
-    CREATE dropdown for Subject (Structured Programming, Database, ...)
-    CREATE text field for Student ID
-    CREATE text fields for Test (20%), Assignment (15%), Project (30%), Exam (35%)
-
-    CREATE label to show total and grade preview
-
-    // --- Table showing all grades in system ---
-    CREATE table with columns:
-        Student ID, Semester, Subject, Test, Assign, Project, Exam, Total, Grade
-
-    DEFINE refresh_all_grades:
-        CLEAR all rows from table
-        FOR EACH grade IN grades
-            INSERT row with grade data
-        END FOR
-    END PROCEDURE
-
-    // --- Preview button logic ---
-    DEFINE preview:
-        TRY to read test, assign, project, exam as numbers
-        IF any number is invalid or not between 0-100 THEN
-            SHOW error message
-        ELSE
-            total, letter = calculate_total_and_letter(test, assign, project, exam)
-            UPDATE preview label to show total and letter
-        END IF
-    END PROCEDURE
-
-    // --- Save button logic ---
-    DEFINE save:
-        READ student_id from field
-        IF student_id NOT in students THEN
-            SHOW error "Student not found"
-            RETURN
-        END IF
-
-        TRY to read test, assign, project, exam as numbers
-        IF any number invalid or outside 0-100 THEN
-            SHOW error "Enter numbers 0-100"
-            RETURN
-        END IF
-
-        CALL add_grade(student_id, semester, subject, test, assign, project, exam)
-        SHOW success message
-        CALL refresh_all_grades()
-        CLEAR all input fields
-        RESET preview label
-    END PROCEDURE
-
-    CREATE buttons:
-        - "Preview Grade" → calls preview
-        - "Save Grade" → calls save
-        - "Refresh List" → calls refresh_all_grades
-        - "Logout" → closes win
-
-    CALL refresh_all_grades()
-
-    WAIT for user interaction
-
-END PROCEDURE
-
-// 9. Display Student dashboard
+// ==================== STUDENT DASHBOARD ====================
 PROCEDURE student_dashboard(parent_window, student_id)
+    win = new Toplevel window with parent = parent_window
+    win.title = "Student Dashboard - " + student_id
+    win.geometry = "750x400"
 
-    CREATE new window "win" as child of parent_window
-    SET title = "Student Dashboard – " + student_id
-    SET size = 750x400
+    student = students[student_id]
+    display label "Welcome " + student.name + " (" + student.program + ")" with font Arial 14
 
-    GET student record from students using student_id
-    DISPLAY welcome message with student.name and student.program
+    // create table (treeview) with columns: Semester, Subject, Test(20%), Assign(15%), Project(30%), Exam(35%), Total, Grade
+    tree = new Treeview with those columns
+    pack tree to fill both directions
 
-    CREATE a table (treeview) with columns:
-        Semester, Subject, Test(20%), Assign(15%), Project(30%), Exam(35%), Total, Grade
-
-    DEFINE refresh procedure:
-        CLEAR all rows from table
-        CALL get_student_grades(student_id) -> store in grade_list
+    PROCEDURE refresh()
+        clear all rows from tree
+        grade_list = get_student_grades(student_id)
         IF grade_list is empty THEN
-            INSERT one row showing "No grades uploaded yet"
+            insert one row with values ("No grades uploaded yet", "", "", "", "", "", "", "")
         ELSE
-            FOR EACH grade IN grade_list
-                INSERT row with grade data
+            FOR EACH grade_row IN grade_list
+                insert row into tree with values = grade_row
             END FOR
         END IF
     END PROCEDURE
 
-    CALL refresh()
+    call refresh()
 
-    CREATE buttons:
-        - "Refresh" button → calls refresh()
-        - "Logout" button → closes win
+    create button "Refresh" with command = refresh, background = lightblue
+    create button "Logout" with command = win.destroy, background = lightcoral
+    pack buttons
 
-    WAIT for user interaction (window loop)
-
+    wait for window events
 END PROCEDURE
 
+// ==================== LECTURER DASHBOARD ====================
+PROCEDURE lecturer_dashboard(parent_window, username)
+    win = new Toplevel window with parent = parent_window
+    win.title = "Lecturer Dashboard - " + username
+    win.geometry = "850x550"
+
+    display label "Upload Student Grade" font Arial 14
+
+    // input frame
+    frame = new Frame inside win
+    pack frame
+
+    // semester dropdown
+    semesters = ["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6"]
+    semester_var = new StringVar with default "Semester 1"
+    semester_combo = new Combobox in frame with values = semesters, textvariable = semester_var, state = readonly
+    place at grid row=0 column=1
+
+    // subject dropdown
+    subjects = ["Structured Programming", "Database", "Web Dev", "Data Structures", "Software Eng", "OS"]
+    subject_var = new StringVar with default subjects[0]
+    subject_combo = new Combobox in frame with values = subjects, textvariable = subject_var, state = readonly
+    place at grid row=0 column=3
+
+    // student ID entry
+    sid_entry = new Entry in frame, width=15
+    place at grid row=1 column=1
+
+    // marks entries
+    test_entry = new Entry in frame, width=10; place at row=2 col=1
+    assign_entry = new Entry in frame, width=10; place at row=2 col=3
+    proj_entry = new Entry in frame, width=10; place at row=3 col=1
+    exam_entry = new Entry in frame, width=10; place at row=3 col=3
+
+    // preview label
+    preview_label = new Label in win with text "Total: --   Grade: --", font Arial 11 bold
+    pack preview_label
+
+    // table showing all grades
+    tree_all = new Treeview in win with columns: Student ID, Semester, Subject, Test, Assign, Project, Exam, Total, Grade
+    pack tree_all to fill both
+
+    PROCEDURE refresh_all_grades()
+        clear all rows from tree_all
+        FOR EACH grade IN grades
+            values = [grade.student_id, grade.semester, grade.subject, grade.test, grade.assign, grade.project, grade.exam, grade.total, grade.letter]
+            insert row into tree_all with values
+        END FOR
+    END PROCEDURE
+
+    PROCEDURE preview_grade()
+        TRY
+            test = convert to float test_entry.get()
+            assign = convert to float assign_entry.get()
+            proj = convert to float proj_entry.get()
+            exam = convert to float exam_entry.get()
+            total, letter = calculate_total_and_letter(test, assign, proj, exam)
+            preview_label.config(text = "Total: " + total + "   Grade: " + letter)
+        CATCH any exception
+            preview_label.config(text = "Enter valid numbers 0-100")
+        END TRY
+    END PROCEDURE
+
+    PROCEDURE save_grade()
+        student_id = sid_entry.get().strip()
+        IF student_id NOT IN students THEN
+            show error message box "Student not found. Register first."
+            RETURN
+        END IF
+
+        TRY
+            test = float(test_entry.get())
+            assign = float(assign_entry.get())
+            proj = float(proj_entry.get())
+            exam = float(exam_entry.get())
+            IF test < 0 OR test > 100 OR assign < 0 OR assign > 100 OR proj < 0 OR proj > 100 OR exam < 0 OR exam > 100 THEN
+                RAISE error
+            END IF
+        CATCH
+            show error message box "Please enter numbers between 0 and 100 for all marks."
+            RETURN
+        END TRY
+
+        add_grade(student_id, semester_var.get(), subject_var.get(), test, assign, proj, exam)
+        show info message box "Grade saved for " + student_id
+        refresh_all_grades()
+
+        // clear input fields
+        sid_entry.delete(0, END)
+        test_entry.delete(0, END)
+        assign_entry.delete(0, END)
+        proj_entry.delete(0, END)
+        exam_entry.delete(0, END)
+        preview_label.config(text = "Total: --   Grade: --")
+    END PROCEDURE
+
+    // buttons
+    create button "Preview Grade" with command = preview_grade, bg = lightyellow
+    create button "Save Grade" with command = save_grade, bg = lightgreen
+    create button "Refresh List" with command = refresh_all_grades
+    create button "Logout" with command = win.destroy, bg = lightcoral
+    pack all buttons horizontally
+
+    refresh_all_grades()
+    wait for window events
+END PROCEDURE
+
+// ==================== MAIN WINDOW ====================
 PROCEDURE main()
+    root = new Tk window
+    root.title = "Academic Portal - Sierra Leone (SDG4)"
+    root.geometry = "500x500"
 
-    CREATE root window
-    SET title = "Academic Portal - Sierra Leone (SDG4)"
-    SET size = 500x500
+    // ----- DEMO DATA -----
+    register_student("S101", "123", "John Koroma", "Faculty of ICT", "BSEM")
+    register_student("S102", "456", "Aminata Sesay", "Faculty of ICT", "BIT")
+    register_lecturer("prof", "pass")
+    add_grade("S101", "Semester 1", "Structured Programming", 85, 78, 88, 92)
+    add_grade("S101", "Semester 1", "Database", 91, 88, 94, 96)
 
-    // --- Create tabs ---
-    CREATE notebook (tab control)
+    // notebook (tabs)
+    notebook = new ttk.Notebook in root
+    pack notebook to fill both, expand = true, padx=10, pady=10
 
     // ---------- LOGIN TAB ----------
-    CREATE login_tab inside notebook
+    login_tab = new Frame in notebook
+    notebook.add(login_tab, text = "Login")
 
-    CREATE dropdown for Role (Student / Lecturer)
-    CREATE text field for ID/Username
-    CREATE password field (masked)
+    role_label = new Label in login_tab with text "Role:"
+    role_label.grid(row=0, column=0, sticky="e", padx=10, pady=10)
+    role_combo = new Combobox in login_tab with values ["Student", "Lecturer"], state = readonly
+    role_combo.current(0)
+    role_combo.grid(row=0, column=1, sticky="w", padx=10, pady=10)
 
-    DEFINE do_login:
-        READ role, uid, password
-        IF any field empty THEN
-            SHOW error "Fill both fields"
+    user_label = new Label in login_tab with text "ID / Username:"
+    user_label.grid(row=1, column=0, sticky="e", padx=10, pady=10)
+    user_entry = new Entry in login_tab, width=20
+    user_entry.grid(row=1, column=1, sticky="w", padx=10, pady=10)
+
+    pwd_label = new Label in login_tab with text "Password:"
+    pwd_label.grid(row=2, column=0, sticky="e", padx=10, pady=10)
+    pwd_entry = new Entry in login_tab, show="*", width=20
+    pwd_entry.grid(row=2, column=1, sticky="w", padx=10, pady=10)
+
+    PROCEDURE do_login()
+        role = role_combo.get()
+        uid = user_entry.get().strip()
+        pwd = pwd_entry.get()
+        IF uid == "" OR pwd == "" THEN
+            show error message box "Please fill both fields"
             RETURN
         END IF
-
         IF role == "Student" THEN
-            IF student_login_ok(uid, password) THEN
-                CALL student_dashboard(root, uid)
-                CLEAR login fields
+            IF student_login_ok(uid, pwd) THEN
+                student_dashboard(root, uid)
+                user_entry.delete(0, END)
+                pwd_entry.delete(0, END)
             ELSE
-                SHOW error "Invalid Student ID or Password"
+                show error message box "Invalid Student ID or Password"
             END IF
-        ELSE  // Lecturer
-            IF lecturer_login_ok(uid, password) THEN
-                CALL lecturer_dashboard(root, uid)
-                CLEAR login fields
+        ELSE   // Lecturer
+            IF lecturer_login_ok(uid, pwd) THEN
+                lecturer_dashboard(root, uid)
+                user_entry.delete(0, END)
+                pwd_entry.delete(0, END)
             ELSE
-                SHOW error "Invalid Lecturer credentials"
+                show error message box "Invalid Lecturer credentials"
             END IF
         END IF
     END PROCEDURE
 
-    CREATE button "Login" → calls do_login
+    login_button = new Button in login_tab with text "Login", command = do_login, bg = "#4CAF50"
+    login_button.grid(row=3, column=0, columnspan=2, pady=20)
 
     // ---------- STUDENT SIGNUP TAB ----------
-    CREATE student_tab inside notebook
+    student_tab = new Frame in notebook
+    notebook.add(student_tab, text = "Student Signup")
 
-    CREATE text fields: Student ID, Full Name, Password, Confirm Password
-    CREATE readonly field for Faculty (default "Faculty of ICT")
-    CREATE dropdown for Program (BSEM, BIT, BBIT, DIT, CIT)
+    s_id_label = new Label in student_tab with text "Student ID:"
+    s_id_label.grid(row=0, column=0, sticky="e", padx=10, pady=5)
+    s_id_entry = new Entry in student_tab
+    s_id_entry.grid(row=0, column=1, padx=10, pady=5)
 
-    DEFINE do_student_signup:
-        READ student_id, name, password, confirm, faculty, program
-        IF student_id, name, or password empty THEN
-            SHOW error "ID, Name and Password required"
+    s_name_label = new Label in student_tab with text "Full Name:"
+    s_name_label.grid(row=1, column=0, sticky="e", padx=10, pady=5)
+    s_name_entry = new Entry in student_tab
+    s_name_entry.grid(row=1, column=1, padx=10, pady=5)
+
+    s_pwd_label = new Label in student_tab with text "Password:"
+    s_pwd_label.grid(row=2, column=0, sticky="e", padx=10, pady=5)
+    s_pwd_entry = new Entry in student_tab, show="*"
+    s_pwd_entry.grid(row=2, column=1, padx=10, pady=5)
+
+    s_cpwd_label = new Label in student_tab with text "Confirm Password:"
+    s_cpwd_label.grid(row=3, column=0, sticky="e", padx=10, pady=5)
+    s_cpwd_entry = new Entry in student_tab, show="*"
+    s_cpwd_entry.grid(row=3, column=1, padx=10, pady=5)
+
+    fac_label = new Label in student_tab with text "Faculty:"
+    fac_label.grid(row=4, column=0, sticky="e", padx=10, pady=5)
+    fac_entry = new Entry in student_tab
+    fac_entry.insert(0, "Faculty of ICT")
+    fac_entry.config(state = "readonly")
+    fac_entry.grid(row=4, column=1, padx=10, pady=5)
+
+    prog_label = new Label in student_tab with text "Program:"
+    prog_label.grid(row=5, column=0, sticky="e", padx=10, pady=5)
+    prog_combo = new Combobox in student_tab with values ["BSEM", "BIT", "BBIT", "DIT", "CIT"], state = readonly
+    prog_combo.current(0)
+    prog_combo.grid(row=5, column=1, padx=10, pady=5)
+
+    PROCEDURE do_student_signup()
+        sid = s_id_entry.get().strip()
+        name = s_name_entry.get().strip()
+        pwd = s_pwd_entry.get()
+        cpwd = s_cpwd_entry.get()
+        faculty = fac_entry.get()
+        program = prog_combo.get()
+        IF sid == "" OR name == "" OR pwd == "" THEN
+            show error message box "ID, Name and Password required"
             RETURN
         END IF
-        IF password != confirm THEN
-            SHOW error "Passwords do not match"
+        IF pwd != cpwd THEN
+            show error message box "Passwords do not match"
             RETURN
         END IF
-        IF register_student(student_id, password, name, faculty, program) THEN
-            SHOW success message
-            CLEAR student signup fields
+        IF register_student(sid, pwd, name, faculty, program) THEN
+            show info message box "Student " + sid + " registered! You can now log in."
+            s_id_entry.delete(0, END)
+            s_name_entry.delete(0, END)
+            s_pwd_entry.delete(0, END)
+            s_cpwd_entry.delete(0, END)
         ELSE
-            SHOW error "Student ID already exists"
+            show error message box "Student ID " + sid + " already exists"
         END IF
     END PROCEDURE
 
-    CREATE button "Register Student" → calls do_student_signup
+    signup_button = new Button in student_tab with text "Register Student", command = do_student_signup, bg = "#2196F3"
+    signup_button.grid(row=6, column=0, columnspan=2, pady=15)
 
     // ---------- LECTURER SIGNUP TAB ----------
-    CREATE lecturer_tab inside notebook
+    lecturer_tab = new Frame in notebook
+    notebook.add(lecturer_tab, text = "Lecturer Signup")
 
-    CREATE text fields: Username, Password, Confirm Password
+    l_user_label = new Label in lecturer_tab with text "Username:"
+    l_user_label.grid(row=0, column=0, sticky="e", padx=10, pady=10)
+    l_user_entry = new Entry in lecturer_tab
+    l_user_entry.grid(row=0, column=1, padx=10, pady=10)
 
-    DEFINE do_lecturer_signup:
-        READ username, password, confirm
-        IF username or password empty THEN
-            SHOW error "Username and password required"
+    l_pwd_label = new Label in lecturer_tab with text "Password:"
+    l_pwd_label.grid(row=1, column=0, sticky="e", padx=10, pady=10)
+    l_pwd_entry = new Entry in lecturer_tab, show="*"
+    l_pwd_entry.grid(row=1, column=1, padx=10, pady=10)
+
+    l_cpwd_label = new Label in lecturer_tab with text "Confirm Password:"
+    l_cpwd_label.grid(row=2, column=0, sticky="e", padx=10, pady=10)
+    l_cpwd_entry = new Entry in lecturer_tab, show="*"
+    l_cpwd_entry.grid(row=2, column=1, padx=10, pady=10)
+
+    PROCEDURE do_lecturer_signup()
+        user = l_user_entry.get().strip()
+        pwd = l_pwd_entry.get()
+        cpwd = l_cpwd_entry.get()
+        IF user == "" OR pwd == "" THEN
+            show error message box "Username and password required"
             RETURN
         END IF
-        IF password != confirm THEN
-            SHOW error "Passwords do not match"
+        IF pwd != cpwd THEN
+            show error message box "Passwords do not match"
             RETURN
         END IF
-        IF register_lecturer(username, password) THEN
-            SHOW success message
-            CLEAR lecturer signup fields
+        IF register_lecturer(user, pwd) THEN
+            show info message box "Lecturer " + user + " registered! You can now log in."
+            l_user_entry.delete(0, END)
+            l_pwd_entry.delete(0, END)
+            l_cpwd_entry.delete(0, END)
         ELSE
-            SHOW error "Username already taken"
+            show error message box "Username " + user + " already taken"
         END IF
     END PROCEDURE
 
-    CREATE button "Register Lecturer" → calls do_lecturer_signup
+    lect_signup_button = new Button in lecturer_tab with text "Register Lecturer", command = do_lecturer_signup, bg = "#FF9800"
+    lect_signup_button.grid(row=3, column=0, columnspan=2, pady=20)
 
-    // --- Start the GUI event loop ---
-    START mainloop of root window
-
+    root.mainloop()
 END PROCEDURE
+
+// ==================== PROGRAM START ====================
+main()
