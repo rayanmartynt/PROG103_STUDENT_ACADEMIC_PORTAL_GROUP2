@@ -67,7 +67,7 @@ def get_student_grades(student_id):
         if g['student_id'] == student_id:
             result.append((
                 g['semester'],
-                g['mopdule'],
+                g['module'],
                 g['test'],
                 g['assignment'],
                 g['project'],
@@ -103,7 +103,7 @@ def register_lecturer(username, password):
     if username in lecturers:
         return False
     # This is an else statement
-    lecturers[username] = {password}
+    lecturers[username] = {"password":password}
     return True
 
 # Function 8: Display Student Dashboard
@@ -196,6 +196,7 @@ def lecturer_dashboard(parent, username):
     module_var = tk.StringVar(value = module[0])
     module_combo = ttk.Combobox(master = frame,
                                 textvariable = module_var,
+                                values = module,
                                 state = 'readonly',
                                 width = 15)
     module_combo.grid(column = 3,
@@ -347,35 +348,35 @@ def lecturer_dashboard(parent, username):
         exam_entry.delete(0, 'end')
         preview_label.config(text = 'Total: ---  Grade: ---')
 
-        # Buttons
-        btn_frame = ttk.Frame(win)
-        btn_frame.pack(pady = 5)
+    # Buttons
+    btn_frame = ttk.Frame(win)
+    btn_frame.pack(pady = 5)
 
-        # Preview button
-        ttk.Button(master = btn_frame,
-                   text = 'Preview Grade',
-                   command = preview).pack(side = 'left',
-                                           padx = 5)
-        # Save Grade button
-        ttk.Button(master = btn_frame,
-                   text = 'Save Grade',
-                   command = save).pack(side = 'left',
+    # Preview button
+    ttk.Button(master = btn_frame,
+                text = 'Preview Grade',
+                command = preview).pack(side = 'left',
                                         padx = 5)
+    # Save Grade button
+    ttk.Button(master = btn_frame,
+                text = 'Save Grade',
+                command = save).pack(side = 'left',
+                                    padx = 5)
 
-        # Refresh button
-        ttk.Button(master = btn_frame,
-                   text = 'Refresh Grades',
-                   command = refresh_all_grades).pack(side = 'left',
-                                                      padx = 5)
-        # Logout button
-        ttk.Button(master = btn_frame,
-                   text = 'Logout',
-                   command = win.destroy).pack(side = 'left',
-                                               padx = 5)
-        refresh_all_grades()
+    # Refresh button
+    ttk.Button(master = btn_frame,
+                text = 'Refresh Grades',
+                command = refresh_all_grades).pack(side = 'left',
+                                                    padx = 5)
+    # Logout button
+    ttk.Button(master = btn_frame,
+                text = 'Logout',
+                command = win.destroy).pack(side = 'left',
+                                            padx = 5)
+    refresh_all_grades()
 
 def main():
-    root = ttk.Window(themename = 'cyborg')
+    root = ttk.Window(themename = 'morph')
     root.title("Limkokwing Student Academic Portal")
     root.geometry('500x500')
 
@@ -441,21 +442,21 @@ def main():
 
     def do_login():
         role = role_var.get()
-        id_username = login_user.get().strip()
+        username = login_user.get().strip()
         password = login_pwd.get()
-        if not id_username or not password:
+        if not username or not password:
             messagebox.showerror("Error", "Please fill both fields")
             return
         if role == "Student":
-            if student_login_validation(id_username, password):
-                student_dashboard(root, id_username)
+            if student_login_validation(username, password):
+                student_dashboard(root, username)
                 login_user.delete(0, tk.END)
                 login_pwd.delete(0, tk.END)
             else:
                 messagebox.showerror("Error", "Invalid Student ID or Password")
         else:  # Lecturer
-            if lecturer_login_validation(id_username, password):
-                lecturer_dashboard(root, id_username)
+            if lecturer_login_validation(username, password):
+                lecturer_dashboard(root, username)
                 login_user.delete(0, tk.END)
                 login_pwd.delete(0, tk.END)
             else:
@@ -528,13 +529,14 @@ def main():
                     padx=10,
                     sticky="e")
     faculty_entry = tk.Entry(master = student_tab)
-    faculty_entry.insert("Faculty of ICT")
+    faculty_entry.insert(0, "Faculty of ICT")
     faculty_entry.config(state="readonly")
     faculty_entry.grid(row=4,
                        column=1,
                        pady=5)
 
-    tk.Label(master = student_tab, text="Program:").grid(row=5,
+    tk.Label(master = student_tab,
+             text="Program:").grid(row=5,
                                                 column=0,
                                                 pady=5,
                                                 padx=10,
