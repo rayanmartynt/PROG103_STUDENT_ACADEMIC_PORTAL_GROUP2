@@ -194,7 +194,59 @@ def lecturer_dashboard(parent, username):
                     column = 3)
 
     # Grade preview
+    preview_label = ttk.Label(master = win,
+                              text = 'Total: ---  Grade: ---')
+    preview_label.pack(pady = 5)
+
+    # Grade table (all grades)
+    ttk.Label(master = win,
+              text = 'All Grades in System').pack(pady = 5)
+    cols2 = ('Student ID', 'Semester', 'Subject', 'Test', 'Assignment', 'Project', 'Exam', 'Total', 'Grade')
+
+    tree_all = ttk.Treeview(master = win,
+                            columns = cols2,
+                            show = 'headings',
+                            height = 8)
+    for col in cols2:
+        tree_all.heading(col,
+                         text = col)
+        tree_all.column(col,
+                        width = 70,
+                        anchor = 'center')
+    tree_all.column("Subject",
+                    width = 120)
+    tree_all.pack(fill = tk.BOTH,
+                  expand = True,
+                  padx = 10,
+                  pady = 5)
+
+    def refresh_all_grades():
+        for row in tree_all.get_children():
+            tree_all.delete(row)
+        for g  in grades:
+            tree_all.insert("",
+                            "end",
+                            values = (g['student_id'],
+                                      g['semester'],
+                                      g['subject'],
+                                      g['test'],
+                                      g['assignment'],
+                                      g['project'],
+                                      g['exam'],
+                                      g['total'],
+                                      g['grade']))
+
+    def preview():
+
+
 
 
 def main():
-    root = ttk.root(themename = 'cyborg')
+    root = ttk.Window(themename = 'cyborg')
+    root.title("Limkokwing Student Academic Portal")
+    root.geometry('500x500')
+
+    root.mainloop()
+
+if __name__ == '__main__':
+    main()
