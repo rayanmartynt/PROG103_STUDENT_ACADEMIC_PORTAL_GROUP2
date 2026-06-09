@@ -387,7 +387,7 @@ def lecturer_dashboard(parent, username):
 
 def main():
     root = ttk.Window(themename = 'morph')
-    root.title("Limkokwing Student Academic Portal")
+    root.title("Grade Hub - (SDG4)")
     root.geometry('500x500')
 
     # Notebook (Tabs)
