@@ -10,7 +10,7 @@ Lecturers can upload test (20%), assignment (15%), project (30%), and exam (35%)
 
 This project was created as the final submission for the **Principles of Structured Programming** course. It demonstrates modular design, clean GUI logic, and real‑world problem solving.
 
-## ✨ Features (Complete List)
+## ✨ Features
 
 ### For Students
 
