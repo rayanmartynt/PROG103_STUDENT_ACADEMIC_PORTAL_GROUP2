@@ -36,10 +36,11 @@ def calculate_total(test, assignment, project, exam):
 
     return total, grade
 
-
+# Function 2: Add or update new record 
 def add_grade(student_id, semester, module, test, assignment, project, exam):
     total, grade = calculate_total(test, assignment, project, exam)
-
+    
+    # Removes or overwrite old record with the same studentId/semester/module 
     for i, g in enumerate(grades):
         if g["student_id"] == student_id and g["semester"] == semester and g["module"] == module:
             grades.pop(i)
