@@ -387,7 +387,7 @@ def lecturer_dashboard(parent, username):
     refresh_all_grades()
 
 def main():
-    root = ttk.Window(themename = 'morph')
+    root = ttk.Window(themename = 'darkly')
     root.title("Grade Hub - (SDG4)")
     root.geometry('500x500')
 
