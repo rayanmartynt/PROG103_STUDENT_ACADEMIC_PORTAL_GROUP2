@@ -1,11 +1,10 @@
 # tkinter provides GUI components: windows, buttons, labels, text boxes, etc.
 import tkinter as tk
-from email.policy import default
 
 # messagebox shows pop-up alerts like errors, success messages, and warnings
 from tkinter import messagebox
 
-# ttk gives modern theme widgets like combo boxes (dropdown menus) and modern treeviews (tables)
+# ttk gives modern theme widgets like combo boxes (dropdown menus) and modern tree views (tables)
 import ttkbootstrap as ttk
 
 
@@ -43,8 +42,8 @@ def add_grade(student_id, semester, module, test, assignment, project, exam):
     total, grade = calculate_total(test, assignment, project, exam)
     # Enumerate create and return a new object
     for i, g in enumerate(grades):
-        # Removes grade with the same semester/module/studentId
-        if g['student_id'] == student_id and g['semester'] == semester and g['module'] == module:
+        # Removes old grade with the same semester/module/studentId
+        if g["student_id"] == student_id and g["semester"] == semester and g["module"] == module:
             grades.pop(i)
             break
         grades.append({
@@ -64,33 +63,33 @@ def get_student_grades(student_id):
 
     result = [] #Empty list for result that will store all grades for one student
     for g in grades:
-        if g['student_id'] == student_id:
+        if g["student_id"] == student_id:
             result.append((
-                g['semester'],
-                g['module'],
-                g['test'],
-                g['assignment'],
-                g['project'],
-                g['exam'],
-                g['total'],
-                g['grade']
+                g["semester"],
+                g["module"],
+                g["test"],
+                g["assignment"],
+                g["project"],
+                g["exam"],
+                g["total"],
+                g["grade"]
             ))
     return result
 
 # Function 4: Student Login Validation
-def student_login_validation(student_id, password):
-    return student_id in students and students['student_id']['password'] == password
+def student_login_validation(id_student, password):
+    return id_student in students and students[id_student]['password'] == password
 
 # Function 5: Lecturer Login Validation
-def lecturer_login_validation(username, password):
-    return username in lecturers and lecturers[username]['password'] == password
+def lecturer_login_validation(user, password):
+    return user in lecturers and lecturers[user]['password'] == password
 
 # Function 6: Register a new student
-def register_student(student_id, password, name, faculty, program):
-    if student_id in students:
+def register_student(id_student, password, name, faculty, program):
+    if id_student in students:
         return False
-    # This is an else statement
-    students[student_id] = {
+    # This save the student's name, faculty, program, and password of a user in Students dictionary
+    students[id_student] = {
         'name': name,
         'faculty': faculty,
         'program': program,
@@ -99,11 +98,11 @@ def register_student(student_id, password, name, faculty, program):
     return True
 
 # Function 7: Register a new lecturer
-def register_lecturer(username, password):
-    if username in lecturers:
+def register_lecturer(user, password):
+    if user in lecturers:
         return False
-    # This is an else statement
-    lecturers[username] = {"password":password}
+    # This save the username and password of a user in lecturers dictionary
+    lecturers[user] = {"password":password}
     return True
 
 # Function 8: Display Student Dashboard
@@ -114,20 +113,28 @@ def student_dashboard(parent, student_id):
 
     student = students[student_id]
     ttk.Label(master = win,
-              text = f'Welcome {student['name']} ({student['program']})', font = ('Arial', 14)).pack(pady = 10)
+              text = f'Welcome {student['name']} ({student['program']})',
+              font = 14).pack(pady = 10)
 
     # Treeview to show all grades with columns
-    columns = ['Semester', 'Subject', 'Test(20%)', 'Assign(15%)', 'Project(30%)', 'Exam(35%)', 'Total', 'Grade']
+    columns = ('Semester', 'Module', 'Test(20%)', 'Assignment(15%)', 'Project(30%)', 'Exam(35%)', 'Total', 'Grade')
     tree = ttk.Treeview(master = win,
                         columns = columns,
                         show = 'headings')
+    for col in columns:
+        tree.heading(col, text = col)
+        tree.column(col,
+                    width = 85,
+                    anchor = 'center')
+    tree.column('Module',
+                width = 130)
     tree.pack(fill = tk.BOTH,
               expand = True,
               padx = 10,
               pady = 5)
 
     def refresh():
-        for row in tree.get_children(student_id):
+        for row in tree.get_children():
             tree.delete(row)
         grade_list = get_student_grades(student_id)
         if not grade_list:
@@ -144,7 +151,7 @@ def student_dashboard(parent, student_id):
 
     ttk.Button(master = win,
                text = 'Logout',
-               command = win.destroy).pack(pady = 10)
+               command = win.destroy).pack(pady = 5)
 
 # Function 9: Display Lecturer Dashboard
 def lecturer_dashboard(parent, username):
@@ -153,7 +160,8 @@ def lecturer_dashboard(parent, username):
     win.geometry('850x550')
 
     ttk.Label(master = win,
-             text = 'Upload Student Grade').pack(pady = 5)
+             text = 'Upload Student Grade',
+              font = ("", 14)).pack(pady = 5)
 
     # Input frame
     frame = ttk.Frame(master = win)
@@ -166,7 +174,7 @@ def lecturer_dashboard(parent, username):
                                      pady = 5,
                                      padx = 5,
                                      sticky = 'e')
-    semester_var = tk.StringVar(value = 'Semester 1')
+    semester_var = ttk.StringVar(value = 'Semester 1')
     sem_combo = ttk.Combobox(master = frame,
                              textvariable = semester_var,
                              state = 'readonly',
@@ -177,7 +185,7 @@ def lecturer_dashboard(parent, username):
                    padx = 5)
 
     # Subject
-    module = ['Structured Programming',
+    modules = ['Structured Programming',
               'Database',
               'Software Engineering',
               'Communication Skills',
@@ -193,10 +201,10 @@ def lecturer_dashboard(parent, username):
                                     pady = 5,
                                     padx = 5,
                                     sticky = 'e')
-    module_var = tk.StringVar(value = module[0])
+    module_var = ttk.StringVar(value = modules[0])
     module_combo = ttk.Combobox(master = frame,
                                 textvariable = module_var,
-                                values = module,
+                                values = modules,
                                 state = 'readonly',
                                 width = 15)
     module_combo.grid(column = 3,
@@ -263,13 +271,15 @@ def lecturer_dashboard(parent, username):
 
     # Grade preview
     preview_label = ttk.Label(master = win,
-                              text = 'Total: ---  Grade: ---')
+                              text = 'Total: ---  Grade: ---',
+                              font = 11)
     preview_label.pack(pady = 5)
 
     # Grade table (all grades)
     ttk.Label(master = win,
-              text = 'All Grades in System').pack(pady = 5)
-    cols2 = ('Student ID', 'Semester', 'Subject', 'Test', 'Assignment', 'Project', 'Exam', 'Total', 'Grade')
+              text = 'All Grades in System',
+              font = 12).pack(pady = 5)
+    cols2 = ('Student ID', 'Semester', 'Module', 'Test (20%)', 'Assignment (15%)', 'Project (30%)', 'Exam (35%)', 'Total', 'Grade')
 
     tree_all = ttk.Treeview(master = win,
                             columns = cols2,
@@ -281,7 +291,7 @@ def lecturer_dashboard(parent, username):
         tree_all.column(col,
                         width = 70,
                         anchor = 'center')
-    tree_all.column("Subject",
+    tree_all.column("Module",
                     width = 120)
     tree_all.pack(fill = tk.BOTH,
                   expand = True,
@@ -296,7 +306,7 @@ def lecturer_dashboard(parent, username):
                             "end",
                             values = (g['student_id'],
                                       g['semester'],
-                                      g['subject'],
+                                      g['module'],
                                       g['test'],
                                       g['assignment'],
                                       g['project'],
@@ -316,9 +326,9 @@ def lecturer_dashboard(parent, username):
             preview_label.config(text = 'Enter valid numbers 0-100')
 
     def save():
-        student_id = studentID_entry.get().strip() #Using strip function to remove whitespaces
-        if student_id not in students:
-            messagebox.showerror('Error',f'Student ID: {student_id} does not exist. This student needs to register first.')
+        id_student = studentID_entry.get().strip() #Using strip function to remove whitespaces
+        if id_student not in students:
+            messagebox.showerror('Error',f'Student ID: {id_student} does not exist. This student needs to register first.')
 
         try:
             test = float(test_entry.get())
@@ -336,21 +346,21 @@ def lecturer_dashboard(parent, username):
             messagebox.showerror('Error', 'Enter valid numbers 0-100 for all grades.')
             return
 
-        add_grade(student_id, semester_var.get(), module_var.get(), test, assignment, project, exam)
-        messagebox.showinfo('Success',f'Grade saved for {student_id}')
+        add_grade(id_student, semester_var.get(), module_var.get(), test, assignment, project, exam)
+        messagebox.showinfo('Success',f'Grade saved for {id_student}')
         refresh_all_grades()
 
         # Clear Entries
-        studentID_entry.delete(0, 'end')
-        test_entry.delete(0, 'end')
-        assignment_entry.delete(0, 'end')
-        project_entry.delete(0, 'end')
-        exam_entry.delete(0, 'end')
+        studentID_entry.delete(0, tk.END)
+        test_entry.delete(0, tk.END)
+        assignment_entry.delete(0, tk.END)
+        project_entry.delete(0, tk.END)
+        exam_entry.delete(0, tk.END)
         preview_label.config(text = 'Total: ---  Grade: ---')
 
     # Buttons
     btn_frame = ttk.Frame(win)
-    btn_frame.pack(pady = 5)
+    btn_frame.pack(pady = 10)
 
     # Preview button
     ttk.Button(master = btn_frame,
@@ -380,7 +390,7 @@ def main():
     root.title("Limkokwing Student Academic Portal")
     root.geometry('500x500')
 
-    # Tabs
+    # Notebook (Tabs)
     tab = ttk.Notebook(root)
     tab.pack(fill = 'both',
              expand = True,
@@ -388,7 +398,7 @@ def main():
              pady = 10)
 
     # ---- LOGIN TAB ----
-    login_tab = ttk.Frame(tab)
+    login_tab = ttk.Frame(master = tab)
     tab.add(login_tab,
             text = 'Login')
 
@@ -412,13 +422,13 @@ def main():
                     pady = 10)
 
     # Username/ID entry field
-    tk.Label(login_tab,
+    tk.Label(master = login_tab,
              text="ID / Username:").grid(row = 1,
                                          column = 0,
                                          pady = 10,
                                          padx = 10,
                                          sticky = " e")
-    login_user = tk.Entry(login_tab,
+    login_user = tk.Entry(master = login_tab,
                           width=20)
     login_user.grid(row=1,
                     column=1,
@@ -426,13 +436,13 @@ def main():
                     padx=10)
 
     # Password Entry field
-    tk.Label(login_tab,
+    tk.Label(master = login_tab,
              text="Password:",).grid(row=2,
                                      column=0,
                                      pady=10,
                                      padx=10,
                                      sticky="e")
-    login_pwd = tk.Entry(login_tab,
+    login_pwd = tk.Entry(master = login_tab,
                          show="*",
                          width=20)
     login_pwd.grid(row=2,
@@ -442,37 +452,36 @@ def main():
 
     def do_login():
         role = role_var.get()
-        username = login_user.get().strip()
+        username_id = login_user.get().strip()
         password = login_pwd.get()
-        if not username or not password:
+        if not username_id or not password:
             messagebox.showerror("Error", "Please fill both fields")
             return
         if role == "Student":
-            if student_login_validation(username, password):
-                student_dashboard(root, username)
+            if student_login_validation(username_id, password):
+                student_dashboard(root, username_id)
                 login_user.delete(0, tk.END)
                 login_pwd.delete(0, tk.END)
             else:
                 messagebox.showerror("Error", "Invalid Student ID or Password")
         else:  # Lecturer
-            if lecturer_login_validation(username, password):
-                lecturer_dashboard(root, username)
+            if lecturer_login_validation(username_id, password):
+                lecturer_dashboard(root, username_id)
                 login_user.delete(0, tk.END)
                 login_pwd.delete(0, tk.END)
             else:
                 messagebox.showerror("Error", "Invalid Lecturer credentials")
 
-
     tk.Button(login_tab,
               text="Login",
               command=do_login,
-              width=15).grid(row=3,
-                             column=0,
-                             columnspan=2,
-                             pady=20)
+              width=15).grid(row = 3,
+                             column = 0,
+                             columnspan = 2,
+                             pady = 20)
 
     # ----- STUDENT SIGNUP TAB -----
-    student_tab = tk.Frame(master = tab)
+    student_tab = ttk.Frame(master = tab)
     tab.add(student_tab,
             text="Student Signup")
 
@@ -482,8 +491,8 @@ def main():
                                       pady=5,
                                       padx=10,
                                       sticky="e")
-    student_id = tk.Entry(master = student_tab)
-    student_id.grid(row=0,
+    id_for_student = tk.Entry(master = student_tab)
+    id_for_student.grid(row=0,
                column=1,
                pady=5)
 
@@ -504,9 +513,9 @@ def main():
                                     pady=5,
                                     padx=10,
                                     sticky="e")
-    password = tk.Entry(master = student_tab,
+    s_password = tk.Entry(master = student_tab,
                      show="*")
-    password.grid(row=2,
+    s_password.grid(row=2,
                column=1,
                pady=5)
 
@@ -552,26 +561,26 @@ def main():
                     pady=5)
 
     def do_student_signup():
-        studentId = student_id.get().strip()
-        studentName = student_name.get().strip()
-        s_password = password.get()
+        id_student = id_for_student.get().strip()
+        name = student_name.get().strip()
+        password = s_password.get()
         confirm_password = studentConfirm_password.get()
         faculty = faculty_entry.get()
         program = program_combo.get()
-        if not studentId or not studentName or not s_password:
+        if not id_student or not name or not password:
             messagebox.showerror("Error", "ID, Name and Password required")
             return
-        if s_password != confirm_password:
+        if password != confirm_password:
             messagebox.showerror("Error", "Passwords do not match")
             return
-        if register_student(student_id, s_password, studentName, faculty, program):
-            messagebox.showinfo("Success", f"Student {studentId} registered! You can now log in.")
-            student_id.delete(0, tk.END)
+        if register_student(id_student, password, name, faculty, program):
+            messagebox.showinfo("Success", f"Student {id_student} registered! You can now log in.")
+            id_for_student.delete(0, tk.END)
             student_name.delete(0, tk.END)
             s_password.delete(0, tk.END)
-            confirm_password.delete(0, tk.END)
+            studentConfirm_password.delete(0, tk.END)
         else:
-            messagebox.showerror("Error", f"Student ID {studentId} already exists")
+            messagebox.showerror("Error", f"Student ID {id_student} already exists")
 
     tk.Button(master = student_tab,
               text="Register Student",
