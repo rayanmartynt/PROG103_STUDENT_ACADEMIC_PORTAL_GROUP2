@@ -7,6 +7,39 @@ from tkinter import messagebox
 # ttk gives modern theme widgets like combo boxes (dropdown menus) and modern tree views (tables)
 import ttkbootstrap as ttk
 
+faculty_data = {
+    "FICT": {
+        "programs": ["BSEM",
+                     "BIT",
+                     "BBIT",
+                     "DIT",
+                     "CIT"],
+        "subjects": [
+            "Structured Programming",
+            "Database",
+            "Software Engineering",
+            "Communication Skills",
+            "Computer Skills",
+            "Computerized Maths",
+            "French",
+            "Mathematics",
+            "Multimedia",
+            "Data Communication"
+        ]
+    },
+    "FCMB": {
+        "programs": ["PC",
+                     "BABJ",
+                     "DMAB"],
+        "subjects": [
+            "Graphic Designing",
+            "Digital Imaging",
+            "Principles of Advertising",
+            "Principles of Marketing",
+            "Drawing"
+        ]
+    }
+}
 
 """In-memory database to store users credentials and students grades"""
 students = {} #stores key: students id, value: {password, name, faculty, program}
@@ -37,18 +70,21 @@ def calculate_total(test, assignment, project, exam):
     return total, grade
 
 # Function 2: Add or update new record 
-def add_grade(student_id, semester, module, test, assignment, project, exam):
+# Function 2: Add or update new record
+def add_grade(student_id, semester, faculty, module, test, assignment, project, exam):
     total, grade = calculate_total(test, assignment, project, exam)
-    
-    # Removes or overwrite old record with the same studentId/semester/module 
+
+    # Removes or overwrite old record with the same studentId/semester/faculty/module
     for i, g in enumerate(grades):
-        if g["student_id"] == student_id and g["semester"] == semester and g["module"] == module:
+        if (g["student_id"] == student_id and g["semester"] == semester and
+                g["faculty"] == faculty and g["module"] == module):
             grades.pop(i)
             break
-    # ← append is NOW outside the loop (one level back)
+    # Append the new grade (outside the loop)
     grades.append({
         'student_id': student_id,
         'semester': semester,
+        "faculty": faculty,
         'module': module,
         'test': test,
         'assignment': assignment,
@@ -57,6 +93,25 @@ def add_grade(student_id, semester, module, test, assignment, project, exam):
         'total': total,
         'grade': grade
     })
+
+
+# Function 3: Get all grades for one student
+def get_student_grades(student_id):
+    result = []
+    for g in grades:
+        if g["student_id"] == student_id:
+            result.append((
+                g["semester"],
+                g["faculty"],  # faculty first (matches dashboard column order)
+                g["module"],
+                g["test"],
+                g["assignment"],
+                g["project"],
+                g["exam"],
+                g["total"],
+                g["grade"]
+            ))
+    return result
     
 
 # Function 3: Get all grades for one student
@@ -67,6 +122,7 @@ def get_student_grades(student_id):
         if g["student_id"] == student_id:
             result.append((
                 g["semester"],
+                g["faculty"],
                 g["module"],
                 g["test"],
                 g["assignment"],
@@ -118,7 +174,15 @@ def student_dashboard(parent, student_id):
               font = 14).pack(pady = 10)
 
     # Treeview to show all grades with columns
-    columns = ('Semester', 'Module', 'Test(20%)', 'Assignment(15%)', 'Project(30%)', 'Exam(35%)', 'Total', 'Grade')
+    columns = ('Semester',
+               'Faculty',
+               'Module',
+               'Test(20%)',
+               'Assignment(15%)',
+               'Project(30%)',
+               'Exam(35%)',
+               'Total',
+               'Grade')
     tree = ttk.Treeview(master = win,
                         columns = columns,
                         show = 'headings')
@@ -129,6 +193,8 @@ def student_dashboard(parent, student_id):
                     anchor = 'center')
     tree.column('Module',
                 width = 130)
+    tree.column('Faculty',
+                width=120)
     tree.pack(fill = tk.BOTH,
               expand = True,
               padx = 10,
@@ -185,36 +251,56 @@ def lecturer_dashboard(parent, username):
                    column = 1,
                    padx = 5)
 
-    # Subject
-    modules = ['Structured Programming',
-              'Database',
-              'Software Engineering',
-              'Communication Skills',
-              'Computer Skills',
-              'Computerized Maths',
-              'French',
-              'Mathematics',
-              'Multimedia',
-              'Data Communication']
+    # Faculty
     ttk.Label(master = frame,
-              text = 'Module').grid(row = 1,
-                                    column = 0,
-                                    pady = 5,
+              text='Faculty:').grid(row = 0,
+                                    column = 2,
                                     padx = 5,
+                                    pady = 5,
                                     sticky = 'e')
-    module_var = ttk.StringVar(value = modules[0])
+    faculty_var = ttk.StringVar(value = list(faculty_data.keys())[0])
+    faculty_combo = ttk.Combobox(master = frame,
+                                 textvariable = faculty_var,
+                                 state = 'readonly',
+                                 values = list(faculty_data.keys()),
+                                 width=20)
+    faculty_combo.grid(row = 0,
+                       column = 3,
+                       padx = 5)
+
+    # Module (subject) - updates when faculty changes
+    ttk.Label(master = frame,
+              text='Module:').grid(row = 1,
+                                   column = 0,
+                                   padx = 5,
+                                   pady = 5,
+                                   sticky = 'e')
+    module_var = ttk.StringVar()
     module_combo = ttk.Combobox(master = frame,
                                 textvariable = module_var,
-                                values = modules,
                                 state = 'readonly',
-                                width = 15)
-    module_combo.grid(column = 3,
-                      row = 0,
-                      padx = 5)
+                                width = 20)
+
+    def update_subjects(*args):
+        faculty = faculty_var.get()
+        subjects = faculty_data.get(faculty, {}).get("subjects", [])
+        module_combo['values'] = subjects
+        if subjects:
+            module_var.set(subjects[0])
+
+    faculty_combo.bind('<<ComboboxSelected>>',
+                       update_subjects)
+    update_subjects()  # initial load
+    module_combo.grid(row = 1,
+                      column = 1,
+                      columnspan = 3,
+                      padx = 5,
+                      pady = 5,
+                      sticky = 'w')
 
     # Student ID
     ttk.Label(master = frame,
-             text = 'Student ID:').grid(row = 1,
+             text = 'Student ID:').grid(row = 2,
                                         column = 0,
                                         pady = 5,
                                         padx = 5,
@@ -280,7 +366,7 @@ def lecturer_dashboard(parent, username):
     ttk.Label(master = win,
               text = 'All Grades in System',
               font = 12).pack(pady = 5)
-    cols2 = ('Student ID', 'Semester', 'Module', 'Test (20%)', 'Assignment (15%)', 'Project (30%)', 'Exam (35%)', 'Total', 'Grade')
+    cols2 = ('Student ID', 'Semester', 'Faculty', 'Module', 'Test (20%)', 'Assignment (15%)', 'Project (30%)', 'Exam (35%)', 'Total', 'Grade')
 
     tree_all = ttk.Treeview(master = win,
                             columns = cols2,
@@ -294,6 +380,8 @@ def lecturer_dashboard(parent, username):
                         anchor = 'center')
     tree_all.column("Module",
                     width = 120)
+    tree_all.column('Faculty',
+                    width=120)
     tree_all.pack(fill = tk.BOTH,
                   expand = True,
                   padx = 10,
@@ -307,6 +395,7 @@ def lecturer_dashboard(parent, username):
                             "end",
                             values = (g['student_id'],
                                       g['semester'],
+                                      g['faculty'],
                                       g['module'],
                                       g['test'],
                                       g['assignment'],
@@ -323,7 +412,7 @@ def lecturer_dashboard(parent, username):
             exam = float(exam_entry.get())
             total, grade = calculate_total(test, assignment, project, exam)
             preview_label.config(text = f'Total: {total} Grade: {grade}')
-        except:
+        except ValueError:
             preview_label.config(text = 'Enter valid numbers 0-100')
 
     def save():
@@ -343,11 +432,18 @@ def lecturer_dashboard(parent, username):
                     0 <= project <= 100 and
                     0 <= exam <= 100):
                 raise ValueError
-        except:
+        except ValueError:
             messagebox.showerror('Error', 'Enter valid numbers 0-100 for all grades.')
             return
 
-        add_grade(id_student, semester_var.get(), module_var.get(), test, assignment, project, exam)
+        add_grade(id_student,
+                  semester_var.get(),
+                  faculty_var.get(),
+                  module_var.get(),
+                  test,
+                  assignment,
+                  project,
+                  exam)
         messagebox.showinfo('Success',f'Grade saved for {id_student}')
         refresh_all_grades()
 
@@ -387,7 +483,7 @@ def lecturer_dashboard(parent, username):
     refresh_all_grades()
 
 def main():
-    root = ttk.Window(themename = 'darkly')
+    root = ttk.Window(themename = 'vapor')
     root.title("Grade Hub - (SDG4)")
     root.geometry('500x500')
 
@@ -538,35 +634,32 @@ def main():
                     pady=5,
                     padx=10,
                     sticky="e")
-    faculty_entry = tk.Entry(master = student_tab)
-    faculty_entry.insert(0, "Faculty of ICT")
-    faculty_entry.config(state="readonly")
-    faculty_entry.grid(row=4,
-                       column=1,
-                       pady=5)
+    faculty_var = ttk.StringVar(value=list(faculty_data.keys())[0])
+    faculty_signup_combo = ttk.Combobox(student_tab, textvariable=faculty_var,
+                                        values=list(faculty_data.keys()), state='readonly', width=25)
+    faculty_signup_combo.grid(row=4, column=1, padx=10, pady=5)
 
-    tk.Label(master = student_tab,
-             text="Program:").grid(row=5,
-                                                column=0,
-                                                pady=5,
-                                                padx=10,
-                                                sticky="e")
-    programs = ["BSEM", "BIT", "BBIT", "DIT", "CIT"]
-    program_combo = ttk.Combobox(master = student_tab,
-                              values=programs,
-                              state="readonly",
-                              width=17)
-    program_combo.current(0)
-    program_combo.grid(row=5,
-                    column=1,
-                    pady=5)
+    ttk.Label(student_tab, text='Program:').grid(row=5, column=0, padx=10, pady=5, sticky='e')
+    program_signup_var = ttk.StringVar()
+    program_combo = ttk.Combobox(student_tab, textvariable=program_signup_var, state='readonly', width=25)
+
+    def update_programs(*args):
+        faculty = faculty_var.get()
+        program = faculty_data.get(faculty, {}).get('programs', [])
+        program_combo['values'] = program
+        if program:
+            program_signup_var.set(program[0])
+    faculty_signup_combo.bind('<<ComboboxSelected>>',
+                              update_programs)
+    update_programs()
+    program_combo.grid(row=5, column=1, padx=10, pady=5)
 
     def do_student_signup():
         id_student = id_for_student.get().strip()
         name = student_name.get().strip()
         password = s_password.get()
         confirm_password = studentConfirm_password.get()
-        faculty = faculty_entry.get()
+        faculty = faculty_var.get()
         program = program_combo.get()
         if not id_student or not name or not password:
             messagebox.showerror("Error", "ID, Name and Password required")
