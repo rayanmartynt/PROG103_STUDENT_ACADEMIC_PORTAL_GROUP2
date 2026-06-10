@@ -533,25 +533,35 @@ def main():
 
     # Password Entry field
     tk.Label(master = login_tab,
-             text="Password:",).grid(row=2,
-                                     column=0,
-                                     pady=10,
-                                     padx=10,
-                                     sticky="e")
+             text="Password:",).grid(row = 2,
+                                     column = 0,
+                                     pady = 10,
+                                     padx = 10,
+                                     sticky = "e")
     login_pwd = tk.Entry(master = login_tab,
-                         show="*",
-                         width=20)
-    login_pwd.grid(row=2,
-                   column=1,
-                   pady=10,
-                   padx=10)
+                         show = "*",
+                         width = 20)
+    login_pwd.grid(row = 2,
+                   column = 1,
+                   pady = 10,
+                   padx = 10)
+
+    login_status = ttk.Label(master = login_tab,
+                             text = "",
+                             foreground = "red")
+    login_status.grid(row = 3,
+                      column = 0,
+                      columnspan = 2,
+                      pady = 5)
 
     def do_login():
+        login_status.config(text = "")
         role = role_var.get()
         username_id = login_user.get().strip()
         password = login_pwd.get()
         if not username_id or not password:
-            messagebox.showerror("Error", "Please fill both fields")
+            login_status.config(text = "Please fill both fields",
+                                foreground = "red")
             return
         if role == "Student":
             if student_login_validation(username_id, password):
@@ -559,19 +569,21 @@ def main():
                 login_user.delete(0, tk.END)
                 login_pwd.delete(0, tk.END)
             else:
-                messagebox.showerror("Error", "Invalid Student ID or Password")
+                login_status.config(text = "Invalid Student ID or Password",
+                                    foreground = "red")
         else:  # Lecturer
             if lecturer_login_validation(username_id, password):
                 lecturer_dashboard(root, username_id)
                 login_user.delete(0, tk.END)
                 login_pwd.delete(0, tk.END)
             else:
-                messagebox.showerror("Error", "Invalid Lecturer credentials")
+                login_status.config(text = "Invalid Lecturer credentials",
+                                    foreground = "red")
 
     tk.Button(login_tab,
               text="Login",
               command=do_login,
-              width=15).grid(row = 3,
+              width=15).grid(row = 4,
                              column = 0,
                              columnspan = 2,
                              pady = 20)
@@ -651,9 +663,12 @@ def main():
     faculty_signup_combo.bind('<<ComboboxSelected>>',
                               update_programs)
     update_programs()
-    program_combo.grid(row=5, column=1, padx=10, pady=5)
-
+    program_combo.grid(row=5,
+                       column=1,
+                       padx=10,
+                       pady=5)
     def do_student_signup():
+        student_signup_status.config(text="")
         id_student = id_for_student.get().strip()
         name = student_name.get().strip()
         password = s_password.get()
@@ -661,10 +676,10 @@ def main():
         faculty = faculty_var.get()
         program = program_combo.get()
         if not id_student or not name or not password:
-            messagebox.showerror("Error", "ID, Name and Password required")
+            student_signup_status.config(text="ID, Name and Password required")
             return
         if password != confirm_password:
-            messagebox.showerror("Error", "Passwords do not match")
+            student_signup_status.config(text="Passwords do not match")
             return
         if register_student(id_student, password, name, faculty, program):
             messagebox.showinfo("Success", f"Student {id_student} registered! You can now log in.")
@@ -673,15 +688,24 @@ def main():
             s_password.delete(0, tk.END)
             studentConfirm_password.delete(0, tk.END)
         else:
-            messagebox.showerror("Error", f"Student ID {id_student} already exists")
+            student_signup_status.config(text= f"Student ID: {id_student} already exists")
+
+    student_signup_status = ttk.Label(master = student_tab,
+                             text="",
+                             foreground = "red")
+    student_signup_status.grid(row = 6,
+                      column = 0,
+                      columnspan = 2,
+                      pady = 5)
 
     tk.Button(master = student_tab,
               text="Register Student",
               command=do_student_signup,
-              width=18).grid(row=6,
-                             column=0,
-                             columnspan=2,
-                             pady=15)
+              width=18).grid(row = 7,
+                             column = 0,
+                             columnspan = 2,
+                             pady = 15)
+
 
     # ----- LECTURER SIGNUP TAB -----
     lecturer_tab = tk.Frame(master = tab)
@@ -724,14 +748,15 @@ def main():
                                   pady=10)
 
     def do_lecturer_signup():
+        lecturer_signup_status.config(text="")
         user = lecturer_username.get().strip()
         password = lecturer_password.get()
         confirm_password = lecturerConfirm_password.get()
         if not user or not password:
-            messagebox.showerror("Error", "Username and password required")
+            lecturer_signup_status.config(text="Username and password required")
             return
         if password != confirm_password:
-            messagebox.showerror("Error", "Passwords do not match")
+            lecturer_signup_status.config(text="Passwords do not match")
             return
         if register_lecturer(user, password):
             messagebox.showinfo("Success", f"Lecturer {user} registered! You can now log in.")
@@ -739,7 +764,15 @@ def main():
             lecturer_password.delete(0, tk.END)
             lecturerConfirm_password.delete(0, tk.END)
         else:
-            messagebox.showerror("Error", f"Username {user} already taken")
+            lecturer_signup_status.config(text=f"Username: {user} already taken")
+
+    lecturer_signup_status = ttk.Label(master=lecturer_tab,
+                                      text="",
+                                      foreground="red")
+    lecturer_signup_status.grid(row=2,
+                               column=0,
+                               columnspan=2,
+                               pady=5)
 
     tk.Button(master = lecturer_tab,
               text="Register Lecturer",
