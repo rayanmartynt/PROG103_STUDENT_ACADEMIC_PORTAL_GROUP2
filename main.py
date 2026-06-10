@@ -69,7 +69,6 @@ def calculate_total(test, assignment, project, exam):
 
     return total, grade
 
-# Function 2: Add or update new record 
 # Function 2: Add or update new record
 def add_grade(student_id, semester, faculty, module, test, assignment, project, exam):
     total, grade = calculate_total(test, assignment, project, exam)
@@ -281,7 +280,7 @@ def lecturer_dashboard(parent, username):
                                 state = 'readonly',
                                 width = 20)
 
-    def update_subjects(*args):
+    def update_module(*args):
         faculty = faculty_var.get()
         subjects = faculty_data.get(faculty, {}).get("subjects", [])
         module_combo['values'] = subjects
@@ -289,8 +288,8 @@ def lecturer_dashboard(parent, username):
             module_var.set(subjects[0])
 
     faculty_combo.bind('<<ComboboxSelected>>',
-                       update_subjects)
-    update_subjects()  # initial load
+                       update_module)
+    update_module()  # initial load
     module_combo.grid(row = 1,
                       column = 1,
                       columnspan = 3,
@@ -300,60 +299,60 @@ def lecturer_dashboard(parent, username):
 
     # Student ID
     ttk.Label(master = frame,
-             text = 'Student ID:').grid(row = 2,
-                                        column = 0,
+             text = 'Student ID:').grid(row = 1,
+                                        column = 2,
                                         pady = 5,
                                         padx = 5,
                                         sticky = 'e')
     studentID_entry = ttk.Entry(master = frame,
                                 width = 15)
-    studentID_entry.grid(column = 1,
-                         row = 1,
+    studentID_entry.grid(row = 1,
+                         column = 3,
                          padx = 5)
 
     # Marks
     ttk.Label(master = frame,
-              text = 'Test (20%):').grid(row = 2,
+              text = 'Test (20%):').grid(row = 3,
                                          column = 0,
                                          pady = 5,
                                          padx = 5,
                                          sticky = 'e')
     test_entry = ttk.Entry(master = frame,
                            width = 10)
-    test_entry.grid(row = 2,
+    test_entry.grid(row = 3,
                     column = 1)
 
     ttk.Label(master = frame,
-              text = 'Assignment (15%):').grid(row = 2,
+              text = 'Assignment (15%):').grid(row = 3,
                                                column = 2,
                                                padx = 5,
                                                pady = 5,
                                                sticky = 'e')
     assignment_entry = ttk.Entry(master = frame,
                                  width = 10)
-    assignment_entry.grid(row = 2,
+    assignment_entry.grid(row = 3,
                           column = 3)
 
     ttk.Label(master = frame,
-              text = 'Project (30%):').grid(row = 3,
+              text = 'Project (30%):').grid(row = 4,
                                             column = 0,
                                             padx = 5,
                                             pady = 5,
                                             sticky = 'e')
     project_entry = ttk.Entry(master = frame,
                               width = 10)
-    project_entry.grid(row = 3,
+    project_entry.grid(row = 4,
                        column = 1)
 
     ttk.Label(master = frame,
-              text = 'Exam (35%):').grid(row = 3,
+              text = 'Exam (35%):').grid(row = 4,
                                          column = 2,
                                          padx = 5,
                                          pady = 5,
                                          sticky = 'e')
     exam_entry = ttk.Entry(master = frame,
                            width = 10)
-    exam_entry.grid(row = 3,
+    exam_entry.grid(row = 4,
                     column = 3)
 
     # Grade preview
