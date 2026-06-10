@@ -77,7 +77,7 @@ pip install ttkbootstrap
 
 ```bash
 git clone https://github.com/rayanmartyn/PROG103_STUDENT_ACADEMIC_PORTAL_GROUP2.git
-cd limkokwing-student-portal
+cd PROG103_STUDENT_ACADEMIC_PORTAL_GROUP2
 ```
 ### 3. Run the application
 
