@@ -1,0 +1,24 @@
+{
+  "students": [
+    {
+      "student_id": "905005656",
+      "name": "Rayan Martin Turay",
+      "faculty": "FICT",
+      "program": "BSEM"
+    },
+
+    {
+      "student_id": "905005090",
+      "name": "Abdul Karim Koroma",
+      "faculty": "FICT",
+      "program": "BSEM"
+    },
+
+    {
+      "student_id": "905005050",
+      "name": "Foday Kamara",
+      "faculty": "FICT",
+      "program": "BSEM"
+    }
+  ]
+}
