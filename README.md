@@ -64,22 +64,25 @@ This project was created as the final submission for the **Principles of Structu
 
 
 ## 📸 Screenshots
-<div style = grid>
 - **Login Page**
+
   <img width="496" height="536" alt="Screenshot 2026-06-13 021730" src="https://github.com/user-attachments/assets/20e95837-b715-4518-a3cf-e22012a1e90c" />
 
 - **Student Signup Page**
+
   <img width="495" height="550" alt="Screenshot 2026-06-13 021819" src="https://github.com/user-attachments/assets/fa337724-d5ba-4f84-af96-5c1f51238a08" />
 
 - **Lecturer Signup Page**
+
   <img width="491" height="545" alt="Screenshot 2026-06-13 021807" src="https://github.com/user-attachments/assets/89add04b-025b-4846-8448-2b2ad3335d8d" />
 
 - **Lecturer Dashboard**
+  
   <img width="847" height="585" alt="Screenshot 2026-06-13 022637" src="https://github.com/user-attachments/assets/dbea4e92-5b6c-417f-aff9-e9d2cb8e52f0" />
 
 - **Student Dashboard**
+
   <img width="941" height="441" alt="Screenshot 2026-06-13 022649" src="https://github.com/user-attachments/assets/78ae9245-abb1-40de-b84f-f2ed8c15ceee" />
-</div>
 
 ## 🚀 How to Run the Project
 
