@@ -541,6 +541,9 @@ def main():
         if not id_student or not name or not password:
             student_signup_status.config(text="ID, Name and Password required")
             return
+        if len(password) < 16:
+            student_signup_status.config(text="Password must be at least 16 characters long")
+            return
         if password != confirm_password:
             student_signup_status.config(text="Passwords do not match")
             return
@@ -619,6 +622,8 @@ def main():
         if not user or not password:
             lecturer_signup_status.config(text="Username and password required")
             return
+        if len(password) < 16:
+            lecturer_signup_status.config(text="Password must be at least 16 characters long")
         if password != confirm_password:
             lecturer_signup_status.config(text="Passwords do not match")
             return
