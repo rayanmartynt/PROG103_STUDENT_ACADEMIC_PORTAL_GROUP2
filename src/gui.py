@@ -69,7 +69,7 @@ def student_dashboard(parent, student_id):
 def lecturer_dashboard(parent, username):
     win = ttk.Toplevel(parent)
     win.title(f'Lecturer Dashboard - {username}')
-    win.geometry('850x550')
+    win.geometry('950x650')
 
     ttk.Label(master = win,
              text = 'Upload Student Grade',
@@ -81,7 +81,7 @@ def lecturer_dashboard(parent, username):
 
     # Semester
     ttk.Label(master = frame,
-             text = 'Semester').grid(row = 0,
+             text = 'Semester:').grid(row = 0,
                                      column = 0,
                                      pady = 5,
                                      padx = 5,
@@ -113,10 +113,27 @@ def lecturer_dashboard(parent, username):
                        column = 3,
                        padx = 5)
 
+    # Program
+    ttk.Label(master = frame,
+              text='Program:').grid(row = 1,
+                                    column = 0,
+                                    padx = 5,
+                                    pady = 5,
+                                    sticky = 'e')
+    program_var = ttk.StringVar(value = list(faculty_data.keys())[0])
+    program_combo = ttk.Combobox(master = frame,
+                                 textvariable = program_var,
+                                 state = 'readonly',
+                                 values = list(faculty_data.keys()),
+                                 width=20)
+    program_combo.grid(row = 1,
+                       column = 1,
+                       padx = 5)
+
     # Module (subject) - updates when faculty changes
     ttk.Label(master = frame,
               text='Module:').grid(row = 1,
-                                   column = 0,
+                                   column = 2,
                                    padx = 5,
                                    pady = 5,
                                    sticky = 'e')
@@ -125,35 +142,60 @@ def lecturer_dashboard(parent, username):
                                 textvariable = module_var,
                                 state = 'readonly',
                                 width = 20)
+    def lecturer_update_programs(*args):
+        faculty = faculty_var.get()
+
+        programs = list(faculty_data.get(faculty, {}).get('programs', {}).keys())
+
+        program_combo['values'] = programs
+        if programs:
+            program_var.set(programs[0])
+            update_module()
+
+
 
     def update_module(*args):
         faculty = faculty_var.get()
-        subjects = faculty_data.get(faculty, {}).get("subjects", [])
+        program = program_var.get()
+        semester = semester_var.get()
+
+        subjects = faculty_data.get(faculty, {}).get('programs', {}).get(program, {}).get(semester, {}).get('subjects', [])
+        # try:
+        #     subjects = faculty_data[faculty]['programs'][program][semester]['subjects']
+        # except KeyError:
+        #     subjects = []
         module_combo['values'] = subjects
         if subjects:
             module_var.set(subjects[0])
-
+        else:
+            module_var.set('')
     faculty_combo.bind('<<ComboboxSelected>>',
+                       lecturer_update_programs)
+
+    program_combo.bind('<<ComboboxSelected>>',
                        update_module)
-    update_module()  # initial load
+
+    sem_combo.bind('<<ComboboxSelected>>',
+                   update_module)
+    lecturer_update_programs()  # initial load
     module_combo.grid(row = 1,
-                      column = 1,
-                      columnspan = 3,
+                      column = 3,
+                      columnspan = 5,
                       padx = 5,
                       pady = 5,
-                      sticky = 'w')
+                      sticky = 'e')
 
     # Student ID
     ttk.Label(master = frame,
-             text = 'Student ID:').grid(row = 1,
-                                        column = 2,
+             text = 'Student ID:').grid(row = 2,
+                                        column = 0,
                                         pady = 5,
                                         padx = 5,
                                         sticky = 'e')
     studentID_entry = ttk.Entry(master = frame,
                                 width = 15)
-    studentID_entry.grid(row = 1,
-                         column = 3,
+    studentID_entry.grid(row = 2,
+                         column = 1,
                          padx = 5)
 
     # Marks
@@ -263,8 +305,25 @@ def lecturer_dashboard(parent, username):
     def save():
         id_student = studentID_entry.get().strip() #Using strip function to remove whitespaces
         if id_student not in students:
-            messagebox.showerror('Error',f'Student ID: {id_student} does not exist. This student needs to register first.')
+            preview_label.config(f'Student ID: {id_student} does not exist. This student needs to register first.',
+                                 fg = 'red')
+            return
+        if id_student == "":
+            preview_label.config(text = 'Student ID must not be empty.',
+                                 fg = 'red')
+            return
 
+        # Get students faculty and the program they are in
+        selected_program = program_var.get()
+        selected_faculty = faculty_var.get()
+
+        # Checks if the student is in the faculty and the correct program, if not, an error message will appear
+        student_faculty = students[id_student]['faculty']
+        student_program = students[id_student]['program']
+
+        if student_program != selected_program or student_faculty != selected_faculty:
+            preview_label.config(text = f'Student ID: {id_student} belongs to' f'{student_faculty} - {student_program}')
+            return
         try:
             test = float(test_entry.get())
             assignment = float(assignment_entry.get())
@@ -405,7 +464,7 @@ def main():
     def do_login():
         login_status.config(text = "")
         role = role_var.get()
-        username_id = login_user.get().strip()
+        username_id = login_user.get().lower().strip()
         password = login_pwd.get()
         if not username_id or not password:
             login_status.config(text = "Please fill both fields",
@@ -519,10 +578,10 @@ def main():
 
     def update_programs(*args):
         faculty = faculty_var.get()
-        program = faculty_data.get(faculty, {}).get('programs', [])
-        program_combo['values'] = program
-        if program:
-            program_signup_var.set(program[0])
+        programs = list(faculty_data.get(faculty, {}).get('programs', {}).keys())
+        program_combo['values'] = programs
+        if programs:
+            program_signup_var.set(programs[0])
     faculty_signup_combo.bind('<<ComboboxSelected>>',
                               update_programs)
     update_programs()
@@ -532,17 +591,23 @@ def main():
                        pady=5)
     def do_student_signup():
         student_signup_status.config(text="")
+
+        # Get student id, name, password, confirm password, faculty, program
         id_student = id_for_student.get().strip()
         name = student_name.get().strip()
         password = s_password.get()
         confirm_password = studentConfirm_password.get()
         faculty = faculty_var.get()
         program = program_combo.get()
+
+        # Checks if lecturer input id and password, if not, an error message will appear
         if not id_student or not name or not password:
             student_signup_status.config(text="ID, Name and Password required")
             return
-        if len(password) < 16:
-            student_signup_status.config(text="Password must be at least 16 characters long")
+
+        # Checks if password length is less than 8, if it is, an error message will appear
+        if len(password) < 8:
+            student_signup_status.config(text="Password must be at least 8 characters long")
             return
         if password != confirm_password:
             student_signup_status.config(text="Passwords do not match")
@@ -616,17 +681,31 @@ def main():
 
     def do_lecturer_signup():
         lecturer_signup_status.config(text="")
-        user = lecturer_username.get().strip()
+        user = lecturer_username.get().lower().strip()
         password = lecturer_password.get()
         confirm_password = lecturerConfirm_password.get()
+
+        # Checks if user input username and password, if not, an error message will appear
         if not user or not password:
             lecturer_signup_status.config(text="Username and password required")
             return
-        if len(password) < 16:
-            lecturer_signup_status.config(text="Password must be at least 16 characters long")
+
+        # Checks if user length is less than 5, if it is, an error message will appear
+        if len(user) < 5:
+            lecturer_signup_status.config(text="Username is too short. Must be at least 5 characters long")
+            return
+
+        # Checks if password length is less than 8, if it is, an error message will appear
+        if len(password) < 8:
+            lecturer_signup_status.config(text="Password must be at least 8 characters long")
+            return
+
+        # Checks if password and confirm password are the same
         if password != confirm_password:
             lecturer_signup_status.config(text="Passwords do not match")
             return
+
+        # If all the credential are correct, you will login
         if register_lecturer(user, password):
             messagebox.showinfo("Success", f"Lecturer {user} registered! You can now log in.")
             lecturer_username.delete(0, tk.END)

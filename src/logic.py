@@ -1,35 +1,230 @@
 """All data structures needed for the Grade Hub and functions ptoject - SDG 4"""
 faculty_data = {
     "FICT": {
-        "programs": ["BSEM",
-                     "BIT",
-                     "BBIT",
-                     "DIT",
-                     "CIT"],
-        "subjects": [
-            "Structured Programming",
-            "Database",
-            "Software Engineering",
-            "Communication Skills",
-            "Computer Skills",
-            "Computerized Maths",
-            "French",
-            "Mathematics",
-            "Multimedia",
-            "Data Communication"
-        ]
+        "programs": {
+            "BSEM": {
+                "Semester 1":{
+                    "subjects" : [
+                        "Principles of Programming",
+                        "Communication Skills",
+                        "French",
+                        "Computer Skills",
+                        "Civic Education",
+                        "Creative & Innovation Studies"
+                    ],
+                },
+                "Semester 2": {
+                    "subjects": [
+                        "Structured Programming",
+                        "Database",
+                        "Software Engineering",
+                        "Computerized Maths",
+                        "Multimedia",
+                        "Data Communication"
+                    ]
+                },
+                "Semester 3": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 4": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 5": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 6": {
+                    "subjects": [
+
+                    ]
+                }
+            },
+
+            "BIT": {
+                "Semester 1":{
+                    "subjects" : [
+                        "Principles of Programming",
+                        "Communication Skills",
+                        "French",
+                        "Computer Skills",
+                        "Civic Education",
+                        "Creative & Innovation Studies"
+                    ],
+                },
+                "Semester 2": {
+                    "subjects": [
+                        "Structured Programming",
+                        "Database",
+                        "Software Engineering",
+                        "Computerized Maths",
+                        "Hardware",
+                        "Data Communication"
+                    ]
+                },
+                "Semester 3": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 4": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 5": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 6": {
+                    "subjects": [
+
+                    ]
+                }
+
+            },
+
+            "BBIT": {
+                "Semester 1":{
+                    "subjects" : [
+                        "Principles of Programming",
+                        "Communication Skills",
+                        "French",
+                        "Computer Skills",
+                        "Civic Education",
+                        "Creative & Innovation Studies"
+                    ],
+                },
+                "Semester 2": {
+                    "subjects": [
+                        "Structured Programming",
+                        "Database",
+                        "Software Engineering",
+                        "Computerized Maths",
+                        "Multimedia",
+                        "Data Communication"
+                    ]
+                },
+                "Semester 3": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 4": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 5": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 6": {
+                    "subjects": [
+
+                    ]
+                }
+            },
+            "DIT": {
+                "Semester 1":{
+                    "subjects" : [
+                        "Principles of Programming",
+                        "Communication Skills",
+                        "French",
+                        "Computer Skills",
+                        "Civic Education",
+                        "Creative & Innovation Studies"
+                    ],
+                },
+                "Semester 2": {
+                    "subjects": [
+                        "Structured Programming",
+                        "Database",
+                        "Software Engineering",
+                        "Computerized Maths",
+                        "Multimedia",
+                        "Data Communication"
+                    ]
+                },
+                "Semester 3": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 4": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 5": {
+                    "subjects": [
+
+                    ]
+                },
+                "Semester 6": {
+                    "subjects": [
+
+                    ]
+                }
+
+            },
+            "CIT": {
+                "Semester 1": {
+                    "subjects": [
+                        "Chinese Language",
+                        "Intro. to Computer Application",
+                        "English Language",
+                        "Mathematics",
+
+                    ]
+                }
+            }
+        },
+
     },
     "FCMB": {
-        "programs": ["PC",
-                     "BABJ",
-                     "DMAB"],
-        "subjects": [
-            "Graphic Designing",
-            "Digital Imaging",
-            "Principles of Advertising",
-            "Principles of Marketing",
-            "Drawing"
-        ]
+        "programs": {
+            "PC": {
+                "Semester 1": {
+                    "subjects": []
+                },
+                "Semester 2": {
+                    "subjects": []
+                },
+                "Semester 3": {
+                    "subjects": []
+                }
+            },
+            "BABJ": {
+                "Semester 1": {
+                    "subjects": []
+                },
+                "Semester 2": {
+                    "subjects": []
+                },
+                "Semester 3": {
+                    "subjects": []
+                }
+            },
+            "DMAB": {
+                "Semester 1": {
+                    "subjects": []
+                },
+                "Semester 2": {
+                    "subjects": []
+                },
+                "Semester 3": {
+                    "subjects": []
+                }
+            },
+
+        }
     }
 }
 
