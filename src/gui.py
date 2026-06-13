@@ -57,10 +57,12 @@ def student_dashboard(parent, student_id):
     # Buttons
     ttk.Button(master = win,
                text = 'Refresh',
+               bootstyle="primary",
                command = refresh).pack(pady = 10)
 
     ttk.Button(master = win,
                text = 'Logout',
+               bootstyle="danger",
                command = win.destroy).pack(pady = 5)
 
 # Function 9: Display Lecturer Dashboard
@@ -310,6 +312,7 @@ def lecturer_dashboard(parent, username):
     # Save Grade button
     ttk.Button(master = btn_frame,
                 text = 'Save Grade',
+                bootstyle="success",
                 command = save).pack(side = 'left',
                                     padx = 5)
 
@@ -321,12 +324,13 @@ def lecturer_dashboard(parent, username):
     # Logout button
     ttk.Button(master = btn_frame,
                 text = 'Logout',
+               bootstyle="danger",
                 command = win.destroy).pack(side = 'left',
                                             padx = 5)
     refresh_all_grades()
 
 def main():
-    root = ttk.Window(themename = 'vapor')
+    root = ttk.Window(themename = 'sandstone')
     root.title("Grade Hub - (SDG4)")
     root.geometry('500x500')
 
@@ -362,13 +366,13 @@ def main():
                     pady = 10)
 
     # Username/ID entry field
-    tk.Label(master = login_tab,
+    ttk.Label(master = login_tab,
              text="ID / Username:").grid(row = 1,
                                          column = 0,
                                          pady = 10,
                                          padx = 10,
                                          sticky = " e")
-    login_user = tk.Entry(master = login_tab,
+    login_user = ttk.Entry(master = login_tab,
                           width=20)
     login_user.grid(row=1,
                     column=1,
@@ -376,13 +380,13 @@ def main():
                     padx=10)
 
     # Password Entry field
-    tk.Label(master = login_tab,
+    ttk.Label(master = login_tab,
              text="Password:",).grid(row = 2,
                                      column = 0,
                                      pady = 10,
                                      padx = 10,
                                      sticky = "e")
-    login_pwd = tk.Entry(master = login_tab,
+    login_pwd = ttk.Entry(master = login_tab,
                          show = "*",
                          width = 20)
     login_pwd.grid(row = 2,
@@ -424,8 +428,9 @@ def main():
                 login_status.config(text = "Invalid Lecturer credentials",
                                     foreground = "red")
 
-    tk.Button(login_tab,
+    ttk.Button(master = login_tab,
               text="Login",
+               bootstyle="primary",
               command=do_login,
               width=15).grid(row = 4,
                              column = 0,
@@ -437,66 +442,80 @@ def main():
     tab.add(student_tab,
             text="Student Signup")
 
-    tk.Label(student_tab,
+    ttk.Label(student_tab,
              text="Student ID:").grid(row=0,
                                       column=0,
                                       pady=5,
                                       padx=10,
                                       sticky="e")
-    id_for_student = tk.Entry(master = student_tab)
+    id_for_student = ttk.Entry(master = student_tab)
     id_for_student.grid(row=0,
                column=1,
                pady=5)
 
-    tk.Label(master = student_tab,
+    ttk.Label(master = student_tab,
              text="Full Name:").grid(row=1,
                                      column=0,
                                      pady=5,
                                      padx=10,
                                      sticky="e")
-    student_name = tk.Entry(master = student_tab)
+    student_name = ttk.Entry(master = student_tab)
     student_name.grid(row=1,
                       column=1,
                       pady=5)
 
-    tk.Label(master = student_tab,
+    ttk.Label(master = student_tab,
              text="Password:").grid(row=2,
                                     column=0,
                                     pady=5,
                                     padx=10,
                                     sticky="e")
-    s_password = tk.Entry(master = student_tab,
+    s_password = ttk.Entry(master = student_tab,
                      show="*")
     s_password.grid(row=2,
                column=1,
                pady=5)
 
-    tk.Label(master = student_tab,
+    ttk.Label(master = student_tab,
              text="Confirm Password:").grid(row=3,
                                             column=0,
                                             pady=5,
                                             padx=10,
                                             sticky="e")
-    studentConfirm_password = tk.Entry(master = student_tab,
+    studentConfirm_password = ttk.Entry(master = student_tab,
                                        show="*")
     studentConfirm_password.grid(row=3,
                                  column=1,
                                  pady=5)
 
-    tk.Label(master = student_tab, text="Faculty:"
-             ).grid(row=4,
-                    column=0,
-                    pady=5,
-                    padx=10,
-                    sticky="e")
+    ttk.Label(master = student_tab,
+              text="Faculty:").grid(row=4,
+                                    column=0,
+                                    pady=5,
+                                    padx=10,
+                                    sticky="e")
     faculty_var = ttk.StringVar(value=list(faculty_data.keys())[0])
-    faculty_signup_combo = ttk.Combobox(student_tab, textvariable=faculty_var,
-                                        values=list(faculty_data.keys()), state='readonly', width=25)
-    faculty_signup_combo.grid(row=4, column=1, padx=10, pady=5)
+    faculty_signup_combo = ttk.Combobox(student_tab,
+                                        textvariable=faculty_var,
+                                        values=list(faculty_data.keys()),
+                                        state='readonly',
+                                        width=25)
+    faculty_signup_combo.grid(row=4,
+                              column=1,
+                              padx=10,
+                              pady=5)
 
-    ttk.Label(student_tab, text='Program:').grid(row=5, column=0, padx=10, pady=5, sticky='e')
+    ttk.Label(master = student_tab,
+              text='Program:').grid(row=5,
+                                    column=0,
+                                    padx=10,
+                                    pady=5,
+                                    sticky='e')
     program_signup_var = ttk.StringVar()
-    program_combo = ttk.Combobox(student_tab, textvariable=program_signup_var, state='readonly', width=25)
+    program_combo = ttk.Combobox(master = student_tab,
+                                 textvariable=program_signup_var,
+                                 state='readonly',
+                                 width=25)
 
     def update_programs(*args):
         faculty = faculty_var.get()
@@ -542,8 +561,9 @@ def main():
                       columnspan = 2,
                       pady = 5)
 
-    tk.Button(master = student_tab,
+    ttk.Button(master = student_tab,
               text="Register Student",
+               bootstyle="primary",
               command=do_student_signup,
               width=18).grid(row = 7,
                              column = 0,
@@ -552,40 +572,40 @@ def main():
 
 
     # ----- LECTURER SIGNUP TAB -----
-    lecturer_tab = tk.Frame(master = tab)
+    lecturer_tab = ttk.Frame(master = tab)
     tab.add(lecturer_tab,
             text="Lecturer Signup")
 
-    tk.Label(master = lecturer_tab,
+    ttk.Label(master = lecturer_tab,
              text="Username:").grid(row=0,
                                     column=0,
                                     pady=10,
                                     padx=10,
                                     sticky="e")
-    lecturer_username = tk.Entry(master = lecturer_tab)
+    lecturer_username = ttk.Entry(master = lecturer_tab)
     lecturer_username.grid(row=0,
                 column=1,
                 pady=10)
 
-    tk.Label(master = lecturer_tab,
+    ttk.Label(master = lecturer_tab,
              text="Password:").grid(row=1,
                                     column=0,
                                     pady=10,
                                     padx=10,
                                     sticky="e")
-    lecturer_password = tk.Entry(master = lecturer_tab,
+    lecturer_password = ttk.Entry(master = lecturer_tab,
                                  show="*")
     lecturer_password.grid(row=1,
                            column=1,
                            pady=10)
 
-    tk.Label(master = lecturer_tab,
+    ttk.Label(master = lecturer_tab,
              text="Confirm Password:").grid(row=2,
                                             column=0,
                                             pady=10,
                                             padx=10,
                                             sticky="e")
-    lecturerConfirm_password = tk.Entry(master = lecturer_tab,
+    lecturerConfirm_password = ttk.Entry(master = lecturer_tab,
                                         show="*")
     lecturerConfirm_password.grid(row=2,
                                   column=1,
@@ -613,15 +633,16 @@ def main():
     lecturer_signup_status = ttk.Label(master=lecturer_tab,
                                       text="",
                                       foreground="red")
-    lecturer_signup_status.grid(row=2,
+    lecturer_signup_status.grid(row=3,
                                column=0,
                                columnspan=2,
                                pady=5)
 
-    tk.Button(master = lecturer_tab,
+    ttk.Button(master = lecturer_tab,
               text="Register Lecturer",
+              bootstyle="primary",
               command=do_lecturer_signup,
-              width=18).grid(row=3,
+              width=18).grid(row=4,
                              column=0,
                              columnspan=2,
                              pady=20)
