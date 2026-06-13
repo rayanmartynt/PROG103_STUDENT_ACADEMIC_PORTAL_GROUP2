@@ -64,6 +64,7 @@ This project was created as the final submission for the **Principles of Structu
 
 
 ## 📸 Screenshots
+<div style = grid>
 - **Login Page**
   <img width="496" height="536" alt="Screenshot 2026-06-13 021730" src="https://github.com/user-attachments/assets/20e95837-b715-4518-a3cf-e22012a1e90c" />
 
@@ -78,7 +79,7 @@ This project was created as the final submission for the **Principles of Structu
 
 - **Student Dashboard**
   <img width="941" height="441" alt="Screenshot 2026-06-13 022649" src="https://github.com/user-attachments/assets/78ae9245-abb1-40de-b84f-f2ed8c15ceee" />
-
+</div>
 
 ## 🚀 How to Run the Project
 
