@@ -395,7 +395,6 @@ students = {} #stores key: students id, value: {password, name, faculty, program
 lecturers = {} #Stores key: username, value: {password}
 grades = [] #Each element is a grade record (dictionary)
 
-
 # Function 1: Calculate total grades(test, assignment, project, exam)
 def calculate_total(test, assignment, project, exam):
     total = test * 0.20 + assignment * 0.15 + project * 0.30 + exam * 0.35
@@ -462,7 +461,6 @@ def get_student_grades(student_id):
                 g["grade"]
             ))
     return result
-
 
 # Function 4: Student Login Validation
 def student_login_validation(id_student, password):
