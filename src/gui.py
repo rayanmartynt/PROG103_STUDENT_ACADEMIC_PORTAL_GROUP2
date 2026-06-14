@@ -608,6 +608,14 @@ def main():
             student_signup_status.config(text="ID, Name and Password required")
             return
 
+        if not id_student.isdigit():
+            student_signup_status.config(text="Student ID must only contain numbers")
+            return
+
+        if not (9 <= len(id_student) <= 13):
+            student_signup_status.config(text="Student ID must be between 9 and 13 digits long")
+            return        
+
         # Checks if password length is less than 8, if it is, an error message will appear
         if len(password) < 8:
             student_signup_status.config(text="Password must be at least 8 characters long")
