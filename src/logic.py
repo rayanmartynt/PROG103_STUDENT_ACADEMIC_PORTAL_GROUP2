@@ -15,9 +15,9 @@ faculty_data = {
                 },
                 "Semester 2": {
                     "subjects": [
-                        "Structured Programming",
-                        "Database",
-                        "Software Engineering",
+                        "Principles of Structured Programming",
+                        "Intro. to Database Systems",
+                        "Intro. to Software Engineering",
                         "Computerized Maths",
                         "Multimedia",
                         "Data Communication"
@@ -25,22 +25,42 @@ faculty_data = {
                 },
                 "Semester 3": {
                     "subjects": [
-
+                        "Communication in the Economy",
+                        "Object-Oriented Programming Methods 1",
+                        "Intro. to Digital Imaging",
+                        "Fundamentals in Computer Systems",
+                        "Software Engineering",
+                        "Database Systems"
                     ]
                 },
                 "Semester 4": {
                     "subjects": [
-
+                        "Object-Oriented Programming Methods 2",
+                        "Sound Production",
+                        "Probability & Statistics",
+                        "Multimedia Authoring",
+                        "Web Design 1",
+                        "Intro. to Video Technology",
                     ]
                 },
                 "Semester 5": {
                     "subjects": [
-
+                        "System Analysis & Design",
+                        "Data Communication & Networking",
+                        "Computer Graphics 1",
+                        "Data Structures & Algorithms Analysis",
+                        "Web Programming Techniques",
+                        "Human Computer Interaction"
                     ]
                 },
                 "Semester 6": {
                     "subjects": [
-
+                        "Animation Studies 1",
+                        "Interactive Multimedia",
+                        "Research Methodology",
+                        "IT Project Management",
+                        "IT Intellectual Property Right and Ethnics",
+                        "Fundamental Entrepreneurship"
                     ]
                 }
             },
@@ -68,25 +88,54 @@ faculty_data = {
                 },
                 "Semester 3": {
                     "subjects": [
-
+                        "Communication inn the Economy",
+                        "Object-Oriented Programming Method 1",
+                        "Web Design 1",
+                        "Fundamentals in Computer Systems",
+                        "Multimedia Technology",
+                        "Database Systems"
                     ]
                 },
                 "Semester 4": {
                     "subjects": [
-
+                        "Intro. to Information Systems",
+                        "Object-Oriented Programming Method 2",
+                        "Probability & Statistics",
+                        "Multimedia Authoring",
+                        "Networking Administration",
+                        "Mobile Commerce Systems"
                     ]
                 },
                 "Semester 5": {
                     "subjects": [
-
+                        "E-Commerce Systems",
+                        "Human Computer Interaction",
+                        "Event Driven Programming",
+                        "Web Programming Techniques",
+                        "IT Project Management",
+                        "Data Structures & Algorithms Analysis"
                     ]
                 },
                 "Semester 6": {
                     "subjects": [
-
+                        "System Analysis & Design",
+                        "Fundamentals of Entrepreneurship",
+                        "Web Hosting & Design",
+                        "IT Intellectual Property Right & Legal Issues",
+                        "Operating Systems",
+                        "Research Methodology"
+                    ]
+                },
+                "Semester 7": {
+                    "subjects": [
+                        "Research Project",
+                        "Knowledge Management",
+                        "Distributes Systems",
+                        "Security Implementation & Management",
+                        "Web Hosting",
+                        "Interactive Multimedia",
                     ]
                 }
-
             },
 
             "BBIT": {
@@ -112,22 +161,116 @@ faculty_data = {
                 },
                 "Semester 3": {
                     "subjects": [
-
+                        "System Analysis & Design",
+                        "Intro. to Information Systems",
+                        "Object-Oriented Programming Methods 1",
+                        "Mobile Commerce Systems",
+                        "Database Systems",
+                        "Concept of Strategic Management"
                     ]
                 },
                 "Semester 4": {
                     "subjects": [
-
+                        "Principles of Marketing",
+                        "Business Law",
+                        "Information Systems Security",
+                        "Fundamentals of Entrepreneurship",
+                        "E-Commerce Systems"
                     ]
                 },
                 "Semester 5": {
                     "subjects": [
-
+                        "Strategic Marketing Management",
+                        "Human Computer Interaction",
+                        "Communications & Networking",
+                        "Web Programming Techniques",
+                        "Human Resource Management"
                     ]
                 },
                 "Semester 6": {
                     "subjects": [
-
+                        "IT Project Management",
+                        "Supply Chain Management",
+                        "Research Methodology",
+                        "Decision Support Systems"
+                    ]
+                },
+                "Semester 7": {
+                    "subjects": [
+                        "Network Administration",
+                        "Research Project",
+                        "Business Intelligence",
+                        "Ethic & Professional Conduct",
+                        "I.T Intellectual Property Rights & Ethics",
+                        "Knowledge Management",
+                        "Electives 2"
+                    ]
+                }
+            },
+            "BICT": {
+                "Semester 1":{
+                    "subjects": [
+                        "Principles of Programming",
+                        "Communication Skills",
+                        "French",
+                        "Computer Skills",
+                        "Civic Education",
+                        "Creative & Innovation Studies"
+                    ]
+                },
+                "Semester 2": {
+                    "subjects": [
+                        "Structured Programming",
+                        "Intro. to Database",
+                        "Principles of Software Engineering",
+                        "Computerized Maths",
+                        "Intro. to Hardware",
+                        "Intro. to Data Communication"
+                    ]
+                },
+                "Semester 3": {
+                    "subjects": [
+                        "Communication in the Economy",
+                        "Object-Oriented Programming Methods 1",
+                        "Database Design & Management 2",
+                        "Mobile System",
+                        "Network Design & Management",
+                        "Data Structures & Algorithms Analysis"
+                    ]
+                },
+                "Semester 4": {
+                    "subjects": [
+                        "LAN & High Speed Technology",
+                        "Entrepreneurship",
+                        "Object-Oriented Programming Methods 2",
+                        "Web Programming Techniques",
+                        "Public Speaking & Presentation Skills",
+                    ]
+                },
+                "Semester 5": {
+                    "subjects": [
+                        "Discrete Structures",
+                        "System Analysis & Design",
+                        "Wireless Network and Applications",
+                        "Probability & Statistics",
+                        "Wireless Internet Application",
+                        "Research Methodology"
+                    ]
+                },
+                "Semester 6": {
+                    "subjects": [
+                        "IT Intellectual Property Rights & Ethics",
+                        "IT Management",
+                        "Client/Server Architecture",
+                        "Operating Systems",
+                        "Major Project 1"
+                    ]
+                },
+                "Semester 7": {
+                    "subjects": [
+                        "Multimedia Technology",
+                        "Computer Maintenance & Upgrade",
+                        "Knowledge Management"
                     ]
                 }
             },
@@ -154,22 +297,32 @@ faculty_data = {
                 },
                 "Semester 3": {
                     "subjects": [
-
+                        "Database Systems",
+                        "Intro. to Video Technology",
+                        "Object-Oriented Programming Method 1",
+                        "Principles of Web Design",
+                        "Fundamental of Computer Systems",
+                        "Intro. to Cybersecurity"
                     ]
                 },
                 "Semester 4": {
                     "subjects": [
-
+                        "User Interface Design",
+                        "Management Information Systems",
+                        "Object-Oriented Programming Method 2",
+                        "Multimedia Authoring",
+                        "Networking Administration",
+                        "Mobile Application Development"
                     ]
                 },
                 "Semester 5": {
                     "subjects": [
-
-                    ]
-                },
-                "Semester 6": {
-                    "subjects": [
-
+                        "Online Payment Systems",
+                        "Cloud Computing & Virtualization",
+                        "Event-Driven Programming",
+                        "Data Science Fundamental",
+                        "Intellectual Property & Ethics",
+                        "Data Structures & Algorithms Analysis"
                     ]
                 }
 
@@ -177,11 +330,20 @@ faculty_data = {
             "CIT": {
                 "Semester 1": {
                     "subjects": [
-                        "Chinese Language",
+                        "Chinese Language 1",
                         "Intro. to Computer Application",
-                        "English Language",
+                        "English Language 2",
                         "Mathematics",
-
+                        "Information Communication Technology 1"
+                    ]
+                },
+                "Semester 2":{
+                    "subjects": [
+                        "Chinese Language 2",
+                        "Statistics",
+                        "English Language 2",
+                        "Information Communication Technology 2",
+                        "Intro. to Programming"
                     ]
                 }
             }
