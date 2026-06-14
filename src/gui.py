@@ -142,6 +142,8 @@ def lecturer_dashboard(parent, username):
                                 textvariable = module_var,
                                 state = 'readonly',
                                 width = 20)
+
+    # The args allows the function to accept any number of positional arguments, packing them into a tuple(collection of values)
     def lecturer_update_programs(*args):
         faculty = faculty_var.get()
 
@@ -152,8 +154,8 @@ def lecturer_dashboard(parent, username):
             program_var.set(programs[0])
             update_module()
 
-
-
+    # This function allows the lecturer to update student module
+    # The args allows the function to accept any number of positional arguments, packing them into a tuple(collection of values)
     def update_module(*args):
         faculty = faculty_var.get()
         program = program_var.get()
@@ -304,14 +306,16 @@ def lecturer_dashboard(parent, username):
 
     def save():
         id_student = studentID_entry.get().strip() #Using strip function to remove whitespaces
-        if id_student not in students:
-            preview_label.config(f'Student ID: {id_student} does not exist. This student needs to register first.',
-                                 fg = 'red')
-            return
+
         if id_student == "":
-            preview_label.config(text = 'Student ID must not be empty.',
-                                 fg = 'red')
+             preview_label.config(text = 'Student ID must not be empty.',
+                                  fg = 'red')
+             return
+
+        if id_student not in students:
+            preview_label.config(text = f'Student ID: {id_student} does not exist. This student needs to register first.')
             return
+
 
         # Get students faculty and the program they are in
         selected_program = program_var.get()
@@ -322,7 +326,7 @@ def lecturer_dashboard(parent, username):
         student_program = students[id_student]['program']
 
         if student_program != selected_program or student_faculty != selected_faculty:
-            preview_label.config(text = f'Student ID: {id_student} belongs to' f'{student_faculty} - {student_program}')
+            preview_label.config(text = f'Student ID: {id_student} belongs to' "" f'{student_faculty} - {student_program}')
             return
         try:
             test = float(test_entry.get())
@@ -337,7 +341,8 @@ def lecturer_dashboard(parent, username):
                     0 <= exam <= 100):
                 raise ValueError
         except ValueError:
-            messagebox.showerror('Error', 'Enter valid numbers 0-100 for all grades.')
+            preview_label.config(text = 'Enter valid numbers 0-100 for all grades.',
+                                 fg = 'yellow')
             return
 
         add_grade(id_student,
@@ -348,7 +353,8 @@ def lecturer_dashboard(parent, username):
                   assignment,
                   project,
                   exam)
-        messagebox.showinfo('Success',f'Grade saved for {id_student}')
+        preview_label.config(text = f'Grade saved for {id_student}',
+                             fg = 'green')
         refresh_all_grades()
 
         # Clear Entries
@@ -575,6 +581,7 @@ def main():
                                  state='readonly',
                                  width=25)
 
+    # The args allows the function to accept any number of positional arguments, packing them into a tuple(collection of values)
     def update_programs(*args):
         faculty = faculty_var.get()
         programs = list(faculty_data.get(faculty, {}).get('programs', {}).keys())
