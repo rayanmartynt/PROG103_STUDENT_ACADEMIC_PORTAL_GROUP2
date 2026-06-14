@@ -382,9 +382,9 @@ def lecturer_dashboard(parent, username):
                                                     padx = 5)
     # Logout button
     ttk.Button(master = btn_frame,
-                text = 'Logout',
+               text = 'Logout',
                bootstyle="danger",
-                command = win.destroy).pack(side = 'left',
+               command = win.destroy).pack(side = 'left',
                                             padx = 5)
     refresh_all_grades()
 
@@ -395,8 +395,7 @@ def main():
 
     # Notebook (Tabs)
     tab = ttk.Notebook(root)
-    tab.pack(fill = 'both',
-             expand = True,
+    tab.pack(expand = True,
              padx = 10,
              pady = 10)
 
