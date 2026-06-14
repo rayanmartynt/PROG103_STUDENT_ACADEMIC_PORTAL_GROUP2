@@ -25,7 +25,9 @@ This project was created as the final submission for the **Principles of Structu
 
 - **Secure login** using username and password  
 - **Upload grades** for any registered student  
-- Choose from **6 semesters** (Semester 1 – 6) and **10 modules** (e.g., Structured Programming, Database, etc.)  
+- Choose from **7 semesters** (Semester 1 – 7).
+- Choose from programs which program the student is in.
+- Choose from modules which module to upload grade for.
 - Enter marks for: **Test (20%)**, **Assignment (15%)**, **Project (30%)**, **Exam (35%)**  
 - **Preview** the weighted total and letter grade **before saving**  
 - **Save grade** – updates the system; if a grade for the same student/semester/module exists, it is overwritten  
@@ -35,10 +37,10 @@ This project was created as the final submission for the **Principles of Structu
 
 ### General & Technical Features
 
-- **Clean, modern GUI** using `ttkbootstrap` (morph theme) – no terminal interaction needed  
+- **Clean, modern GUI** using `ttkbootstrap` (sandstone theme) – no terminal interaction needed  
 - **In‑memory data storage** with Python dictionaries and lists (easy to understand, no external database required)  
 - **Structured programming** – uses functions, loops, decision structures, and modular design  
-- **Real‑world alignment** – built for University of Sierra Leone  
+- **Real‑world alignment** – built for Universities/Colleges/Schools accross Sierra Leone
 - **Supports SDG 4** (Quality Education) by digitising academic records
   
 
@@ -77,8 +79,8 @@ This project was created as the final submission for the **Principles of Structu
   <img width="491" height="545" alt="Screenshot 2026-06-13 021807" src="https://github.com/user-attachments/assets/89add04b-025b-4846-8448-2b2ad3335d8d" />
 
 - **Lecturer Dashboard**
-  
-  <img width="847" height="585" alt="Screenshot 2026-06-13 022637" src="https://github.com/user-attachments/assets/dbea4e92-5b6c-417f-aff9-e9d2cb8e52f0" />
+
+  <img width="950" height="682" alt="Screenshot 2026-06-14 091624" src="https://github.com/user-attachments/assets/fea52312-4397-42d9-9854-49d792e7bd02" />
 
 - **Student Dashboard**
 
