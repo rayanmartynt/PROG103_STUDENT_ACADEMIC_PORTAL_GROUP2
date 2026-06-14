@@ -395,6 +395,18 @@ students = {} #stores key: students id, value: {password, name, faculty, program
 lecturers = {} #Stores key: username, value: {password}
 grades = [] #Each element is a grade record (dictionary)
 
+GRADE_POINTS = {
+    'A+': 4.0,
+    'A': 4.0,
+    'B+': 3.7,
+    'B': 3.3,
+    'B-': 3.0,
+    'C+': 2.7,
+    'C': 2.3,
+    'C-': 2.0,
+    'F': 0.0
+}
+
 
 # Function 1: Calculate total grades(test, assignment, project, exam)
 def calculate_total(test, assignment, project, exam):
@@ -462,6 +474,25 @@ def get_student_grades(student_id):
                 g["grade"]
             ))
     return result
+
+# Function 4: Calculate students gpa by semester
+def calculate_semester_gpa(student_id, semester):
+    grade_list = get_student_grades(student_id)
+
+    semester_grades = [
+        grade
+        for grade in grade_list
+        if grade[0] == semester
+    ]
+
+    if not semester_grades:
+        return 0.0
+    total_points = 0
+
+    for grade in semester_grades:
+        total_points += GRADE_POINTS.get(grade[8], 0.0)
+
+    return round(total_points / len(semester_grades), 2)
 
 
 # Function 4: Student Login Validation

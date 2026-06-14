@@ -308,8 +308,7 @@ def lecturer_dashboard(parent, username):
         id_student = studentID_entry.get().strip() #Using strip function to remove whitespaces
 
         if id_student == "":
-             preview_label.config(text = 'Student ID must not be empty.',
-                                  fg = 'red')
+             preview_label.config(text = 'Student ID must not be empty.')
              return
 
         if id_student not in students:
@@ -326,7 +325,7 @@ def lecturer_dashboard(parent, username):
         student_program = students[id_student]['program']
 
         if student_program != selected_program or student_faculty != selected_faculty:
-            preview_label.config(text = f'Student ID: {id_student} belongs to' "" f'{student_faculty} - {student_program}')
+            preview_label.config(text = f'Student ID: {id_student} belongs to' " " f'{student_faculty} - {student_program}')
             return
         try:
             test = float(test_entry.get())
@@ -341,8 +340,7 @@ def lecturer_dashboard(parent, username):
                     0 <= exam <= 100):
                 raise ValueError
         except ValueError:
-            preview_label.config(text = 'Enter valid numbers 0-100 for all grades.',
-                                 fg = 'yellow')
+            preview_label.config(text = 'Enter valid numbers 0-100 for all grades.')
             return
 
         add_grade(id_student,
@@ -353,8 +351,7 @@ def lecturer_dashboard(parent, username):
                   assignment,
                   project,
                   exam)
-        preview_label.config(text = f'Grade saved for {id_student}',
-                             fg = 'green')
+        preview_label.config(text = f'Grade saved for {id_student}')
         refresh_all_grades()
 
         # Clear Entries
