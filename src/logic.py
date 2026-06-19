@@ -429,7 +429,9 @@ faculty_data = {
                         "Principles of Screenwriting",
                         "Corporate Production",
                         "Political News Analysis",
-                        "",
+                        "Corporate Communications",
+                        "Public Relations Writing",
+                        "Media Law & Ethics"
                     ]
                 },
             },
