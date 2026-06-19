@@ -352,26 +352,77 @@ faculty_data = {
     },
     "FCMB": {
         "programs": {
-            "PC": {
+            "BPC": {
                 "Semester 1": {
                     "subjects": [
-
+                        "Civic Education",
+                        "French Language 1",
+                        "Intro. Communication Skills",
+                        "Intro. to Mass Media",
+                        "intro. to Computer Skills"
                     ]
                 },
                 "Semester 2": {
-                    "subjects": []
+                    "subjects": [
+                        "Professional Communication Skills",
+                        "Intro. to Broadcasting",
+                        "Intro. to Journalism",
+                        "Photography 1",
+                        "Media Writing",
+                        "Intro. to Screenwriting"
+                    ]
                 },
                 "Semester 3": {
-                    "subjects": []
+                    "subjects": [
+                        "Advertising Principles",
+                        "Business Communication",
+                        "Principles of Public Relations",
+                        "Web Technology 1",
+                        "Writing Skills for Communicators",
+                        "Principles of Marketing"
+                    ]
                 },
                 "Semester 4": {
-                    "subjects": []
+                    "subjects": [
+                        "Communication in the New Economy",
+                        "Principles of Business Law",
+                        "Writing for Mass Media",
+                        "Integrated Marketing Communication",
+                        "Media Law & Ethics",
+                        "Public Speaking & Presentation Skills"
+                    ]
                 },
                 "Semester 5": {
-                    "subjects": []
+                    "subjects": [
+                        "Writing for Creative Industries",
+                        "Consumer Behaviour",
+                        "Media Planning",
+                        "Copywriting",
+                        "Global Advertising",
+                        "PR Communication"
+                    ]
                 },
                 "Semester 6": {
-                    "subjects": []
+                    "subjects": [
+                        "Communication Research",
+                        "Advertising Regulations Issues & Ethics",
+                        "Corporate Communication",
+                        "Public Relations Management",
+                        "Managing Publicity & Media Relations",
+                        "Strategic Advertising",
+                        "Dynamics of Small Business",
+                        "Communication Management"
+                    ]
+                },
+                "Semester 7": {
+                    "subjects": [
+                        "Research Project",
+                        "Newspaper Production",
+                        "International Public Relation",
+                        "Broadcast Production Project",
+                        "Instructional Video Production",
+                        "Strategic Marketing Communication"
+                    ]
                 }
             },
             "BABJ": {
@@ -434,6 +485,16 @@ faculty_data = {
                         "Media Law & Ethics"
                     ]
                 },
+                "Semester 7": {
+                    "subjects": [
+                        "Research Project",
+                        "Newspaper Production",
+                        "International Public Relation",
+                        "Broadcast Production Project",
+                        "Strategic Marketing Comm.",
+                        "Instructional Video Production"
+                    ]
+                }
             },
             "DMAB": {
                 "Semester 1": {
