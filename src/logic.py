@@ -354,35 +354,141 @@ faculty_data = {
         "programs": {
             "PC": {
                 "Semester 1": {
-                    "subjects": []
+                    "subjects": [
+
+                    ]
                 },
                 "Semester 2": {
                     "subjects": []
                 },
                 "Semester 3": {
+                    "subjects": []
+                },
+                "Semester 4": {
+                    "subjects": []
+                },
+                "Semester 5": {
+                    "subjects": []
+                },
+                "Semester 6": {
                     "subjects": []
                 }
             },
             "BABJ": {
                 "Semester 1": {
-                    "subjects": []
+                    "subjects": [
+                        "Intro. to Mass Media",
+                        "Civic Education",
+                        "French Language 1",
+                        "Intro. to Communication Skills",
+                    ]
                 },
                 "Semester 2": {
-                    "subjects": []
+                    "subjects": [
+                        "Professional Comm. Skills",
+                        "Intro. to Broadcasting",
+                        "Intro. to Journalism",
+                        "Photography 1",
+                        "Media Writing",
+                        "Intro. to Screenwriting"
+                    ]
                 },
                 "Semester 3": {
-                    "subjects": []
-                }
+                    "subjects": [
+                        "Web Journalism",
+                        "Mass Media & Society",
+                        "Current Affairs",
+                        "Fundamentals of Camera Operation",
+                        "Web Technology 1"
+                    ]
+                },
+                "Semester 4": {
+                    "subjects": [
+                        "Principles of Broadcasting Techniques",
+                        "Intro. to News Writing",
+                        "Media Writing 2",
+                        "Media Management",
+                        "Fundamentals of Entrepreneurship",
+                        "Development Communication"
+                    ]
+                },
+                "Semester 5": {
+                    "subjects": [
+                        "Investigative Reporting",
+                        "Documentary Theory & Practice",
+                        "Media Writing 3",
+                        "Graphic & Publication Design",
+                        "Feature Writing",
+                        "Public Relation Management",
+                        "Organizational Behaviour"
+                    ]
+                },
+                "Semester 6": {
+                    "subjects": [
+                        "Communication Research Methodology",
+                        "Principles of Screenwriting",
+                        "Corporate Production",
+                        "Political News Analysis",
+                        "Corporate Communications",
+                        "Public Relations Writing",
+                        "Media Law & Ethics"
+                    ]
+                },
             },
             "DMAB": {
                 "Semester 1": {
-                    "subjects": []
+                    "subjects": [
+                        "Civic Education",
+                        "French Language",
+                        "Intro. to Communication Skills",
+                        "Fundamentals of Design",
+                        "Creative and Innovation Studies",
+                        "Intro. to Computer Skills"
+                    ]
                 },
                 "Semester 2": {
-                    "subjects": []
+                    "subjects": [
+                        "Drawing 1",
+                        "Intro. to Broadcasting",
+                        "Intro. to Digital Graphics",
+                        "Intro. to Multimedia",
+                        "Principles of Marketing",
+                        "Principles of Advertising",
+                        "Intro. to Digital Imaging"
+                    ]
                 },
                 "Semester 3": {
-                    "subjects": []
+                    "subjects": [
+                        "Principles of Public Relations",
+                        "Visualisation Techniques 1",
+                        "Writing for Mass Media",
+                        "Intro. to Screenwriting",
+                        "Public Speaking & Presentation Skills",
+                        "Sound Production",
+                        "Photography"
+                    ]
+                },
+                "Semester 4": {
+                    "subjects": [
+                        "Consumer Behaviour",
+                        "2D Animation",
+                        "Advertising Creativity",
+                        "Web Technology 1",
+                        "Broadcast Media Production"
+                        "Intro. Video Technology"
+                        "Multimedia Technologies 1",
+                    ]
+                },
+                "Semester 5": {
+                    "subjects": [
+                        "Advertising Campaign"
+                        "Media & Society"
+                        "Fundamental of Entrepreneurship"
+                        "Intellectual Property"
+                        "Major Advertising"
+                        "Major Broadcasting"
+                        "Major Multimedia",
+                    ]
                 }
             },
 
