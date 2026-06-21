@@ -98,7 +98,7 @@ pip install ttkbootstrap
 ### 2. Download the code
 
 ```bash
-git clone https://github.com/rayanmartyn/PROG103_STUDENT_ACADEMIC_PORTAL_GROUP2.git
+git clone https://github.com/rayanmartynt/PROG103_STUDENT_ACADEMIC_PORTAL_GROUP2.git
 cd PROG103_STUDENT_ACADEMIC_PORTAL_GROUP2
 cd src
 ```
