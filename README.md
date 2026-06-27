@@ -5,7 +5,7 @@
 
 ## 📌 Overview
 
-The **Grade Hub** is a desktop application that helps students and lecturers work together more effectively in universities accros Sierra Leone.  
+The **Grade Hub** is a desktop application that helps students and lecturers work together more effectively in universities or schools accros Sierra Leone.  
 Lecturers can upload test (20%), assignment (15%), project (30%), and exam (35%) scores. The system automatically calculates weighted totals and letter grades. Students can log in with their ID to view their own semester‑by‑semester results.
 
 This project was created as the final submission for the **Principles of Structured Programming** course. It demonstrates modular design, clean GUI logic, and real‑world problem solving.
